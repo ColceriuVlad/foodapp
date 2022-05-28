@@ -1,2 +1,2 @@
 # foodapp
-Food Application Like Globo - Web
+Food Application Like Glovo - Web
