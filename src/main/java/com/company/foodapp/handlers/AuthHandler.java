@@ -38,14 +38,14 @@ public class AuthHandler implements BeforeHandler {
         var username = claims.getIssuer();
         var usersFromDb = userRepository.findAll();
 
-        for (var user : usersFromDb) {
-            if (username == user.username) {
+        for (var userFromDb : usersFromDb) {
+            if (username.equals(userFromDb.username)) {
                 flow = Flow.CONTINUE;
             } else {
                 flow = Flow.HALT;
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             }
         }
-
         return flow;
     }
 }

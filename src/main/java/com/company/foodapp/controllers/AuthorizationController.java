@@ -2,7 +2,6 @@ package com.company.foodapp.controllers;
 
 import com.company.foodapp.core.CustomRequest;
 import com.company.foodapp.models.User;
-import com.company.foodapp.repositories.UserRepository;
 import com.company.foodapp.utils.JacksonUtils;
 import com.company.foodapp.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/authorization")
 public class AuthorizationController {
-    private UserRepository userRepository;
     private JwtUtils jwtUtils;
     private JacksonUtils jacksonUtils;
 
     @Autowired
-    public AuthorizationController(UserRepository userRepository, JwtUtils jwtUtils, JacksonUtils jacksonUtils) {
-        this.userRepository = userRepository;
+    public AuthorizationController(JwtUtils jwtUtils, JacksonUtils jacksonUtils) {
         this.jwtUtils = jwtUtils;
         this.jacksonUtils = jacksonUtils;
     }
