@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
@@ -24,7 +25,7 @@ public class JwtUtils {
         this.properties = propertiesFileReader.getProperties("application.properties");
     }
 
-    public String createJWT(String issuer, String subject, long ttlMillis) {
+    public String createJWT(String issuer, String subject, String role, long ttlMillis) {
         //The JWT signature algorithm we will be using to sign the token
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
@@ -40,6 +41,7 @@ public class JwtUtils {
                 .setIssuedAt(now)
                 .setSubject(subject)
                 .setIssuer(issuer)
+                .claim("role", role)
                 .signWith(signatureAlgorithm, signingKey);
 
         //if it has been specified, let's add the expiration

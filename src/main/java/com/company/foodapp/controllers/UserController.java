@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    @Before(@BeforeElement(AuthHandler.class))
+    @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
     public ResponseEntity<User> getUser(@PathVariable Integer id) {
         ResponseEntity<User> response;
 

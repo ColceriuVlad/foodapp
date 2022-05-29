@@ -33,7 +33,7 @@ public class AuthorizationController {
 
         for (var userFromDb : usersFromDb) {
             if (user.username.equals(userFromDb.username) && user.password.equals(userFromDb.password)) {
-                jwt = jwtUtils.createJWT(user.username, String.valueOf(userFromDb.id), 1000000);
+                jwt = jwtUtils.createJWT(user.username, String.valueOf(userFromDb.id), userFromDb.role, 1000000);
             }
         }
 
