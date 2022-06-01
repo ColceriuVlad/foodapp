@@ -1,5 +1,6 @@
 package com.company.foodapp.controllers;
 
+import com.company.foodapp.core.PropertiesFileReader;
 import com.company.foodapp.handlers.AuthHandler;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
@@ -11,27 +12,33 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Properties;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
     private UserRepository userRepository;
+    private Logger logger;
 
     @Autowired
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
+        this.logger = Logger.getLogger("UserController");
     }
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         ResponseEntity<List<User>> response;
 
-        try {
-            var users = userRepository.findAll();
+        var users = userRepository.findAll();
+
+        if (!users.isEmpty()) {
+            logger.info("Successfully retrieved users");
             response = new ResponseEntity<>(users, HttpStatus.OK);
-        } catch (Exception exception) {
+        } else {
+            logger.info("Could not retrieve users");
             response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            exception.printStackTrace();
         }
 
         return response;
@@ -42,12 +49,15 @@ public class UserController {
     public ResponseEntity<User> getUser(@PathVariable Integer id) {
         ResponseEntity<User> response;
 
-        try {
-            var user = userRepository.findById(id).get();
+        var user = userRepository.findById(id).get();
+
+        if (user != null) {
+            logger.info("Successfully retrieved user");
             response = new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (Exception exception) {
+
+        } else {
+            logger.info("Could not retrieve user");
             response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            exception.printStackTrace();
         }
 
         return response;
@@ -59,9 +69,12 @@ public class UserController {
 
         try {
             userRepository.save(user);
-            response = new ResponseEntity("User with username: " + user.username + " was introduced", HttpStatus.OK);
+            logger.info(String.format("User with id %s was successfully saved", user.id));
+            response = new ResponseEntity(HttpStatus.OK);
         } catch (Exception exception) {
-            response = new ResponseEntity("User could not be introduced", HttpStatus.NOT_ACCEPTABLE);
+            logger.info("Could not save user");
+            logger.info("\n" + exception.getMessage());
+            response = new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
             exception.printStackTrace();
         }
 

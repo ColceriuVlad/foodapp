@@ -1,7 +1,10 @@
 package com.company.foodapp.controllers;
 
+import com.company.foodapp.handlers.AuthHandler;
 import com.company.foodapp.models.Supplier;
 import com.company.foodapp.repositories.SupplierRepository;
+import com.kastkode.springsandwich.filter.annotation.Before;
+import com.kastkode.springsandwich.filter.annotation.BeforeElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,22 +26,43 @@ public class SupplierController {
     }
 
     @GetMapping
+    @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
     public ResponseEntity<List<Supplier>> getAllSuppliers() {
         ResponseEntity<List<Supplier>> response;
 
         var suppliers = supplierRepository.findAll();
 
-        if (suppliers.isEmpty()) {
-            logger.info("Could not retrieve suppliers");
-            response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }else{
+        if (!suppliers.isEmpty()) {
             logger.info("Successfully retrieved suppliers");
             response = new ResponseEntity<>(suppliers, HttpStatus.OK);
+
+        } else {
+            logger.info("Could not retrieve suppliers");
+            response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return response;
     }
 
+    @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
+    @GetMapping("{id}")
+    public ResponseEntity<Supplier> getSupplier(@PathVariable int id) {
+        ResponseEntity<Supplier> response;
+
+        var supplier = supplierRepository.findById(id).get();
+
+        if (supplier != null) {
+            logger.info("Supplier was retrieved successfully");
+            response = new ResponseEntity<>(supplier, HttpStatus.OK);
+        } else {
+            logger.info("Could not retrieve supplier");
+            response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return response;
+    }
+
+    @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
     @PostMapping
     public ResponseEntity insertSupplier(@RequestBody Supplier supplier) {
         ResponseEntity response = null;
