@@ -1,19 +1,17 @@
 package com.company.foodapp.controllers;
 
-import com.company.foodapp.core.PropertiesFileReader;
 import com.company.foodapp.handlers.AuthHandler;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
 import com.kastkode.springsandwich.filter.annotation.Before;
 import com.kastkode.springsandwich.filter.annotation.BeforeElement;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Properties;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/users")
@@ -22,9 +20,9 @@ public class UserController {
     private Logger logger;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, Logger logger) {
         this.userRepository = userRepository;
-        this.logger = Logger.getLogger("UserController");
+        this.logger = logger;
     }
 
     @GetMapping

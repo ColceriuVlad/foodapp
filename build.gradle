@@ -20,6 +20,7 @@ dependencies {
 	implementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'com.kastkode:springsandwich:1.0.2'
+    implementation 'org.mockito:mockito-all:1.10.19'
     runtimeOnly 'mysql:mysql-connector-java'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

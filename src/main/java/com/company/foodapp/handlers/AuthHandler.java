@@ -4,25 +4,24 @@ import com.company.foodapp.repositories.UserRepository;
 import com.company.foodapp.utils.JwtUtils;
 import com.kastkode.springsandwich.filter.api.BeforeHandler;
 import com.kastkode.springsandwich.filter.api.Flow;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.logging.Logger;
 
 @Component
 public class AuthHandler implements BeforeHandler {
-    Logger logger = Logger.getLogger("AuthHandler");
-
     private JwtUtils jwtUtils;
     private UserRepository userRepository;
+    private Logger logger;
 
     @Autowired
-    public AuthHandler(JwtUtils jwtUtils, UserRepository userRepository) {
+    public AuthHandler(JwtUtils jwtUtils, UserRepository userRepository, Logger logger) {
         this.jwtUtils = jwtUtils;
         this.userRepository = userRepository;
+        this.logger = logger;
     }
 
     @Override

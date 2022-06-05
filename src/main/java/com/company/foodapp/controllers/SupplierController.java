@@ -5,13 +5,12 @@ import com.company.foodapp.models.Supplier;
 import com.company.foodapp.repositories.SupplierRepository;
 import com.kastkode.springsandwich.filter.annotation.Before;
 import com.kastkode.springsandwich.filter.annotation.BeforeElement;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/suppliers")
@@ -20,9 +19,9 @@ public class SupplierController {
     private Logger logger;
 
     @Autowired
-    public SupplierController(SupplierRepository supplierRepository) {
+    public SupplierController(SupplierRepository supplierRepository, Logger logger) {
         this.supplierRepository = supplierRepository;
-        this.logger = Logger.getLogger("SuppliersController");
+        this.logger = logger;
     }
 
     @GetMapping

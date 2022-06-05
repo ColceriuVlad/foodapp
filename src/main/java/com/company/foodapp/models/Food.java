@@ -3,7 +3,7 @@ package com.company.foodapp.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name="Food")
+@Table(name = "Food")
 public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,14 +15,14 @@ public class Food {
     @ManyToOne
     public Supplier supplier;
 
-    public Food(){
+    public Food() {
 
     }
 
-    public Food(int id, String name, int price, float discount){
-        this.id=id;
-        this.name=name;
-        this.price=price;
-        this.discount=discount;
+    public Food(int id, String name, int price, float discount) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.discount = discount;
     }
 }

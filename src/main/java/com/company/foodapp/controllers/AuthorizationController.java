@@ -1,6 +1,7 @@
 package com.company.foodapp.controllers;
 
 import com.company.foodapp.core.CustomRequest;
+import com.company.foodapp.core.PropertiesFileReader;
 import com.company.foodapp.models.User;
 import com.company.foodapp.utils.JacksonUtils;
 import com.company.foodapp.utils.JwtUtils;
@@ -12,21 +13,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Properties;
+
 @RestController
 @RequestMapping("/authorization")
 public class AuthorizationController {
     private JwtUtils jwtUtils;
     private JacksonUtils jacksonUtils;
+    private PropertiesFileReader propertiesFileReader;
+    private Properties properties;
 
     @Autowired
-    public AuthorizationController(JwtUtils jwtUtils, JacksonUtils jacksonUtils) {
+    public AuthorizationController(JwtUtils jwtUtils, JacksonUtils jacksonUtils, PropertiesFileReader propertiesFileReader) {
         this.jwtUtils = jwtUtils;
         this.jacksonUtils = jacksonUtils;
+        this.propertiesFileReader = propertiesFileReader;
+        this.properties = this.propertiesFileReader.getProperties("application.properties");
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody User user) {
-        var usersFromDbString = new CustomRequest("http://localhost:8080/users").getResponse();
+        var usersFromDbString = new CustomRequest(properties.getProperty("ENDPOINT_USERS")).getResponse();
         var usersFromDb = jacksonUtils.parseJsonAsUsersList(usersFromDbString);
         String jwt = null;
         ResponseEntity<String> response;
