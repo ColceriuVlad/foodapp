@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
-
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -33,5 +34,74 @@ public class UserControllerTest {
         var response = userController.getAllUsers();
         Assertions.assertEquals(expectedUsers, response.getBody());
         Assertions.assertEquals(expectedStatusCode, response.getStatusCode());
+    }
+
+    @Test
+    public void getAllUsersReturnsEmpty() {
+        List<User> expectedUsers = mock(List.class);
+
+        when(userRepository.findAll()).thenReturn(expectedUsers);
+        when(expectedUsers.isEmpty()).thenReturn(true);
+
+        var response = userController.getAllUsers();
+        var responseBody = response.getBody();
+        var responseStatusCode = response.getStatusCode();
+
+        Assertions.assertEquals(null, responseBody);
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, responseStatusCode);
+    }
+
+    @Test
+    public void getUser() {
+        var userId = 1;
+        var user = mock(User.class);
+        var optional = Optional.of(user);
+
+        when(userRepository.findById(userId)).thenReturn(optional);
+
+        var response = userController.getUser(userId);
+        var responseBody = response.getBody();
+        var responseStatusCode = response.getStatusCode();
+
+        Assertions.assertEquals(user, responseBody);
+        Assertions.assertEquals(HttpStatus.OK, responseStatusCode);
+    }
+
+    @Test
+    public void getUserReturnsEmpty() {
+        Integer userId = 1;
+
+        when(userRepository.findById(userId)).thenThrow(NoSuchElementException.class);
+
+        var response = userController.getUser(userId);
+        var responseBody = response.getBody();
+        var responseStatusCode = response.getStatusCode();
+
+        Assertions.assertEquals(null, responseBody);
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, responseStatusCode);
+    }
+
+    @Test
+    public void insertUser() {
+        var user = mock(User.class);
+
+        user.username = "username";
+        user.password = "password";
+        user.role = "role";
+
+        var response = userController.insertUser(user);
+        var responseStatusCode = response.getStatusCode();
+
+        Assertions.assertEquals(HttpStatus.OK, responseStatusCode);
+    }
+
+    @Test
+    public void insertUserWithNullProperties() {
+        var user = mock(User.class);
+
+        var response = userController.insertUser(user);
+        var responseStatusCode = response.getStatusCode();
+
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseStatusCode);
     }
 }

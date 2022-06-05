@@ -1,10 +1,11 @@
 package com.company.foodapp.controllers;
 
-import com.company.foodapp.core.CustomRequest;
 import com.company.foodapp.core.PropertiesFileReader;
+import com.company.foodapp.dto.JwtDetails;
 import com.company.foodapp.models.User;
-import com.company.foodapp.utils.JacksonUtils;
+import com.company.foodapp.repositories.UserRepository;
 import com.company.foodapp.utils.JwtUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,35 +20,45 @@ import java.util.Properties;
 @RequestMapping("/authorization")
 public class AuthorizationController {
     private JwtUtils jwtUtils;
-    private JacksonUtils jacksonUtils;
+    private UserRepository userRepository;
     private PropertiesFileReader propertiesFileReader;
     private Properties properties;
+    private Logger logger;
 
     @Autowired
-    public AuthorizationController(JwtUtils jwtUtils, JacksonUtils jacksonUtils, PropertiesFileReader propertiesFileReader) {
+    public AuthorizationController(JwtUtils jwtUtils, UserRepository userRepository, PropertiesFileReader propertiesFileReader, Logger logger) {
         this.jwtUtils = jwtUtils;
-        this.jacksonUtils = jacksonUtils;
+        this.userRepository = userRepository;
         this.propertiesFileReader = propertiesFileReader;
-        this.properties = this.propertiesFileReader.getProperties("application.properties");
+        this.properties = propertiesFileReader.getProperties("application.properties");
+        this.logger = logger;
     }
 
+
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
-        var usersFromDbString = new CustomRequest(properties.getProperty("ENDPOINT_USERS")).getResponse();
-        var usersFromDb = jacksonUtils.parseJsonAsUsersList(usersFromDbString);
-        String jwt = null;
-        ResponseEntity<String> response;
+    public ResponseEntity login(@RequestBody User user) {
+        var usersFromDb = userRepository.findAll();
+        ResponseEntity response = null;
+        String jwtToken = null;
 
         for (var userFromDb : usersFromDb) {
             if (user.username.equals(userFromDb.username) && user.password.equals(userFromDb.password)) {
-                jwt = jwtUtils.createJWT(user.username, String.valueOf(userFromDb.id), userFromDb.role, 1000000);
+                var jwtDetails = new JwtDetails(
+                        userFromDb.username,
+                        userFromDb.password,
+                        userFromDb.role,
+                        Long.parseLong(properties.getProperty("JWT_DURATION")));
+
+                jwtToken = jwtUtils.createJWT(jwtDetails.id, jwtDetails.subject, jwtDetails.role, jwtDetails.duration);
             }
         }
 
-        if (jwt != null) {
-            response = new ResponseEntity<>(jwt, HttpStatus.OK);
+        if (jwtToken != null) {
+            logger.info("User has logged in successfully");
+            response = new ResponseEntity(jwtToken, HttpStatus.OK);
         } else {
-            response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            logger.info("User was not authenticated");
+            response = new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
 
         return response;

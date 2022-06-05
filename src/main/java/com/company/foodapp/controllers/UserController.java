@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/users")
@@ -26,6 +27,7 @@ public class UserController {
     }
 
     @GetMapping
+    @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
     public ResponseEntity<List<User>> getAllUsers() {
         ResponseEntity<List<User>> response;
 
@@ -47,14 +49,14 @@ public class UserController {
     public ResponseEntity<User> getUser(@PathVariable Integer id) {
         ResponseEntity<User> response;
 
-        var user = userRepository.findById(id).get();
+        try {
+            var user = userRepository.findById(id).get();
+            logger.info("Successfully logged in");
 
-        if (user != null) {
-            logger.info("Successfully retrieved user");
             response = new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (NoSuchElementException noSuchElementException) {
+            logger.info("User could not be authenticated");
 
-        } else {
-            logger.info("Could not retrieve user");
             response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -65,15 +67,15 @@ public class UserController {
     public ResponseEntity insertUser(@RequestBody User user) {
         ResponseEntity response;
 
-        try {
+        if (user.username != null && user.password != null && user.role != null) {
             userRepository.save(user);
-            logger.info(String.format("User with id %s was successfully saved", user.id));
+            logger.info("User was saved in the database");
+
             response = new ResponseEntity(HttpStatus.OK);
-        } catch (Exception exception) {
-            logger.info("Could not save user");
-            logger.info("\n" + exception.getMessage());
-            response = new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-            exception.printStackTrace();
+        } else {
+            logger.info("User was not saved in the database");
+
+            response = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         return response;
