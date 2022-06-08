@@ -9,7 +9,11 @@ import java.util.Properties;
 public class PropertiesFileReader {
     private Properties properties;
 
-    public Properties getProperties(String fileName) {
+    public PropertiesFileReader(){
+        properties = getProperties("application.properties");
+    }
+
+    private Properties getProperties(String fileName) {
         properties = new Properties();
         var inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
         try {
@@ -19,5 +23,9 @@ public class PropertiesFileReader {
         }
 
         return properties;
+    }
+
+    public String getProperty(String key){
+        return properties.getProperty(key);
     }
 }

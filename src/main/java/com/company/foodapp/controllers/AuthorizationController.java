@@ -14,15 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Properties;
-
 @RestController
 @RequestMapping("/authorization")
 public class AuthorizationController {
     private JwtUtils jwtUtils;
     private UserRepository userRepository;
     private PropertiesFileReader propertiesFileReader;
-    private Properties properties;
     private Logger logger;
 
     @Autowired
@@ -30,13 +27,12 @@ public class AuthorizationController {
         this.jwtUtils = jwtUtils;
         this.userRepository = userRepository;
         this.propertiesFileReader = propertiesFileReader;
-        this.properties = propertiesFileReader.getProperties("application.properties");
         this.logger = logger;
     }
 
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody User user) {
+    public ResponseEntity<String> login(@RequestBody User user) {
         var usersFromDb = userRepository.findAll();
         ResponseEntity response = null;
         String jwtToken = null;
@@ -47,7 +43,7 @@ public class AuthorizationController {
                         userFromDb.username,
                         userFromDb.password,
                         userFromDb.role,
-                        Long.parseLong(properties.getProperty("JWT_DURATION")));
+                        Long.parseLong(propertiesFileReader.getProperty("JWT_DURATION")));
 
                 jwtToken = jwtUtils.createJWT(jwtDetails.id, jwtDetails.subject, jwtDetails.role, jwtDetails.duration);
             }

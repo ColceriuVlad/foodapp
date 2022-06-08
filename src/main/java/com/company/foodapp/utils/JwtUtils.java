@@ -11,17 +11,14 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
-import java.util.Properties;
 
 @Component
 public class JwtUtils {
     private PropertiesFileReader propertiesFileReader;
-    private Properties properties;
 
     @Autowired
     public JwtUtils(PropertiesFileReader propertiesFileReader) {
         this.propertiesFileReader = propertiesFileReader;
-        this.properties = propertiesFileReader.getProperties("application.properties");
     }
 
     public String createJWT(String issuer, String subject, String role, long ttlMillis) {
@@ -32,7 +29,7 @@ public class JwtUtils {
         Date now = new Date(nowMillis);
 
         //We will sign our JWT with our ApiKey secret
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(properties.getProperty("JWT_SECRET"));
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(propertiesFileReader.getProperty("JWT_SECRET"));
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         //Let's set the JWT Claims
@@ -57,7 +54,7 @@ public class JwtUtils {
     public Claims decodeJWT(String jwt) {
         //This line will throw an exception if it is not a signed JWS (as expected)
         Claims claims = Jwts.parser()
-                .setSigningKey(DatatypeConverter.parseBase64Binary(properties.getProperty("JWT_SECRET")))
+                .setSigningKey(DatatypeConverter.parseBase64Binary(propertiesFileReader.getProperty("JWT_SECRET")))
                 .parseClaimsJws(jwt).getBody();
         return claims;
     }
