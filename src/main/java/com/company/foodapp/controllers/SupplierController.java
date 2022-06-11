@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -44,17 +45,17 @@ public class SupplierController {
     }
 
     @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
-    @GetMapping("{id}")
-    public ResponseEntity<Supplier> getSupplier(@PathVariable int id) {
+    @GetMapping("{name}")
+    public ResponseEntity<Supplier> getSupplier(@PathVariable String name) {
         ResponseEntity<Supplier> response;
 
-        var supplier = supplierRepository.findById(id).get();
+        try {
+            var supplier = supplierRepository.findByName(name).get();
 
-        if (supplier != null) {
-            logger.info("Supplier was retrieved successfully");
+            logger.info("Supplier with id " + supplier.id + " was retrieved successfully");
             response = new ResponseEntity<>(supplier, HttpStatus.OK);
-        } else {
-            logger.info("Could not retrieve supplier");
+        } catch (Exception e) {
+            logger.info("Could not retrieve supplier with id " + name);
             response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -63,7 +64,7 @@ public class SupplierController {
 
     @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
     @PostMapping
-    public ResponseEntity insertSupplier(@RequestBody Supplier supplier) {
+    public ResponseEntity<String> insertSupplier(@RequestBody Supplier supplier) {
         ResponseEntity response = null;
 
         if (supplier.discountRate != null && supplier.transportationCost != null && supplier.transportationCurrency != null) {

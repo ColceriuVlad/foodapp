@@ -12,20 +12,20 @@ public class Supplier {
     public String name;
     public Integer transportationCost;
     public String transportationCurrency;
-    public Float discountRate;
+    public Double discountRate;
 
     public Supplier() {
 
     }
 
-    public Supplier(int id, String name, Integer transportationCost, float discountRate) {
+    public Supplier(int id, String name, Integer transportationCost, Double discountRate) {
         this.id = id;
         this.name = name;
         this.transportationCost = transportationCost;
         this.discountRate = discountRate;
     }
 
-    public Supplier(String name, Integer transportationCost, float discountRate) {
+    public Supplier(String name, Integer transportationCost, Double discountRate) {
         this.name = name;
         this.transportationCost = transportationCost;
         this.discountRate = discountRate;
