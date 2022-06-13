@@ -22,10 +22,10 @@ jacocoTestReport {
     classDirectories.setFrom(files(classDirectories.files.collect {
         fileTree(dir: it,
                 exclude: [
-                        '**/dto/*.java',
+                        '**/dto/**',
                         '**/models/**',
-                        '**/repositories/*',
-                        '**/configuration/*',
+                        '**/repositories/**',
+                        '**/configuration/**',
                         '**/FoodAppApplication*',
                 ])
     }))
@@ -56,9 +56,9 @@ jacocoTestCoverageVerification {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 
-test.finalizedBy jacocoTestReport
 check.dependsOn jacocoTestCoverageVerification
 
 dependencies {
@@ -66,10 +66,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-    implementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'com.kastkode:springsandwich:1.0.2'
-    implementation 'org.mockito:mockito-all:1.10.19'
     runtimeOnly 'mysql:mysql-connector-java'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testImplementation 'org.mockito:mockito-all:1.10.19'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

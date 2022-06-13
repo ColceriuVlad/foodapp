@@ -45,7 +45,7 @@ public class AuthorizationController {
                         userFromDb.role,
                         Long.parseLong(propertiesFileReader.getProperty("JWT_DURATION")));
 
-                jwtToken = jwtUtils.createJWT(jwtDetails.id, jwtDetails.subject, jwtDetails.role, jwtDetails.duration);
+                jwtToken = jwtUtils.createJWT(jwtDetails);
             }
         }
 

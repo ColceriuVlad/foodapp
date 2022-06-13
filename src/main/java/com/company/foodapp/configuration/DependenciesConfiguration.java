@@ -1,6 +1,9 @@
 package com.company.foodapp.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InjectionPoint;
@@ -19,7 +22,19 @@ public class DependenciesConfiguration {
 
     @Bean
     @Scope("singleton")
-    public ObjectMapper objectMapper(){
+    public ObjectMapper objectMapper() {
         return new ObjectMapper();
+    }
+
+    @Bean
+    @Scope("prototype")
+    public JwtBuilder jwtBuilder() {
+        return Jwts.builder();
+    }
+
+    @Bean
+    @Scope("prototype")
+    public JwtParser jwtParser() {
+        return Jwts.parser();
     }
 }

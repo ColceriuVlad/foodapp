@@ -1,12 +1,14 @@
 package com.company.foodapp.utils;
 
 import com.company.foodapp.core.PropertiesFileReader;
+import com.company.foodapp.dto.JwtDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
@@ -15,13 +17,17 @@ import java.util.Date;
 @Component
 public class JwtUtils {
     private PropertiesFileReader propertiesFileReader;
+    private JwtBuilder jwtBuilder;
+    private JwtParser jwtParser;
 
     @Autowired
-    public JwtUtils(PropertiesFileReader propertiesFileReader) {
+    public JwtUtils(PropertiesFileReader propertiesFileReader, JwtBuilder jwtBuilder, JwtParser jwtParser) {
         this.propertiesFileReader = propertiesFileReader;
+        this.jwtBuilder = jwtBuilder;
+        this.jwtParser = jwtParser;
     }
 
-    public String createJWT(String issuer, String subject, String role, long ttlMillis) {
+    public String createJWT(JwtDetails jwtDetails) {
         //The JWT signature algorithm we will be using to sign the token
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
@@ -33,29 +39,32 @@ public class JwtUtils {
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         //Let's set the JWT Claims
-        JwtBuilder builder = Jwts.builder()
-                .setIssuedAt(now)
-                .setSubject(subject)
-                .setIssuer(issuer)
-                .claim("role", role)
+        jwtBuilder.setIssuedAt(now)
+                .setSubject(jwtDetails.subject)
+                .setIssuer(jwtDetails.id)
+                .claim("role", jwtDetails.role)
                 .signWith(signatureAlgorithm, signingKey);
 
         //if it has been specified, let's add the expiration
-        if (ttlMillis > 0) {
-            long expMillis = nowMillis + ttlMillis;
+        if (jwtDetails.duration > 0) {
+            long expMillis = nowMillis + jwtDetails.duration;
             Date exp = new Date(expMillis);
-            builder.setExpiration(exp);
+            jwtBuilder.setExpiration(exp);
         }
 
         //Builds the JWT and serializes it to a compact, URL-safe string
-        return builder.compact();
+        return jwtBuilder.compact();
     }
 
     public Claims decodeJWT(String jwt) {
         //This line will throw an exception if it is not a signed JWS (as expected)
-        Claims claims = Jwts.parser()
-                .setSigningKey(DatatypeConverter.parseBase64Binary(propertiesFileReader.getProperty("JWT_SECRET")))
-                .parseClaimsJws(jwt).getBody();
-        return claims;
+
+        var jwtSecret = propertiesFileReader.getProperty("JWT_SECRET");
+        var convertedJwtSecret = DatatypeConverter.parseBase64Binary(jwtSecret);
+        var parserWithSigningKey = jwtParser.setSigningKey(convertedJwtSecret);
+        var parsedClaims = parserWithSigningKey.parseClaimsJws(jwt);
+        var parsedClaimsBody = parsedClaims.getBody();
+
+        return parsedClaimsBody;
     }
 }

@@ -8,9 +8,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
+
 import java.util.ArrayList;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyString;
+
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -42,7 +43,7 @@ public class AuthorizationControllerTest {
 
         when(propertiesFileReader.getProperty("JWT_DURATION")).thenReturn("1000");
         when(userRepository.findAll()).thenReturn(usersFromDB);
-        when(jwtUtils.createJWT(anyString(), anyString(), anyString(), anyLong())).thenReturn(expectedToken);
+        when(jwtUtils.createJWT(anyObject())).thenReturn(expectedToken);
 
         var response = authorizationController.login(user);
         var responseBody = response.getBody();
@@ -53,7 +54,7 @@ public class AuthorizationControllerTest {
     }
 
     @Test
-    public void invalidLogin(){
+    public void invalidLogin() {
         var user = mock(User.class);
         var usersFromDB = new ArrayList<User>();
 
