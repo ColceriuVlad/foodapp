@@ -12,6 +12,25 @@ repositories {
     mavenCentral()
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.enabled true
+    }
+
+    classDirectories.setFrom(files(classDirectories.files.collect {
+        fileTree(dir: it,
+                exclude: [
+                        '**/dto/*.java',
+                        '**/models/**',
+                        '**/repositories/*',
+                        '**/configuration/*',
+                        '**/FoodAppApplication*',
+                ])
+    }))
+}
+
 jacocoTestCoverageVerification {
     violationRules {
         rule {
@@ -21,6 +40,17 @@ jacocoTestCoverageVerification {
                 minimum = 0.9
             }
         }
+
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: [
+                            '**/dto/**',
+                            '**/models/**',
+                            '**/repositories/**',
+                            '**/configuration/**',
+                            '**/FoodAppApplication*',
+                    ])
+        }))
     }
 }
 
@@ -28,6 +58,7 @@ test {
     useJUnitPlatform()
 }
 
+test.finalizedBy jacocoTestReport
 check.dependsOn jacocoTestCoverageVerification
 
 dependencies {
@@ -35,7 +66,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-	implementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'com.kastkode:springsandwich:1.0.2'
     implementation 'org.mockito:mockito-all:1.10.19'
