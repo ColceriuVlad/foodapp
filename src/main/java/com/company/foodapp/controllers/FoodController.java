@@ -4,6 +4,7 @@ import com.company.foodapp.handlers.AuthHandler;
 import com.company.foodapp.models.Food;
 import com.company.foodapp.repositories.FoodRepository;
 import com.company.foodapp.repositories.SupplierRepository;
+import com.company.foodapp.services.FoodService;
 import com.kastkode.springsandwich.filter.annotation.Before;
 import com.kastkode.springsandwich.filter.annotation.BeforeElement;
 import org.slf4j.Logger;
@@ -12,21 +13,58 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
+
+@RequestMapping("food")
 @RestController
 public class FoodController {
     private FoodRepository foodRepository;
+    private FoodService foodService;
     private SupplierRepository supplierRepository;
     private Logger logger;
 
     @Autowired
-    public FoodController(FoodRepository foodRepository, SupplierRepository supplierRepository, Logger logger) {
+    public FoodController(FoodRepository foodRepository, FoodService foodService, SupplierRepository supplierRepository, Logger logger) {
         this.foodRepository = foodRepository;
+        this.foodService = foodService;
         this.supplierRepository = supplierRepository;
         this.logger = logger;
     }
 
-    @PostMapping("suppliers/{supplierName}")
+    @GetMapping("{supplierName}")
+    @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
+    public ResponseEntity<List<Food>> getAllFoodTypes(@PathVariable String supplierName) {
+        ResponseEntity response;
+
+        var foods = foodService.getAllFoodsBySupplierName(supplierName);
+
+        if (!foods.isEmpty()) {
+            response = new ResponseEntity(foods, HttpStatus.OK);
+        } else {
+            response = new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+        return response;
+    }
+
+    @GetMapping("{supplierName}/{foodName}")
+    @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
+    public ResponseEntity<Food> getFoodFromSupplier(@PathVariable String supplierName, @PathVariable String foodName) {
+        ResponseEntity response;
+
+        var food = foodService.getFoodFromSupplier(supplierName, foodName);
+
+        if (food != null) {
+            response = new ResponseEntity(food, HttpStatus.OK);
+        } else {
+            response = new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+        return response;
+    }
+
+    @PostMapping("{supplierName}")
     @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
     public ResponseEntity addFoodToSupplier(@PathVariable String supplierName, @RequestBody Food food) {
         ResponseEntity response;
@@ -46,7 +84,7 @@ public class FoodController {
         return response;
     }
 
-    @PutMapping("suppliers/{supplierName}/{foodName}")
+    @PutMapping("{supplierName}/{foodName}")
     @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
     public ResponseEntity updateFoodPrice(@PathVariable String supplierName, @PathVariable String foodName, @RequestBody Food food) {
         var actualFood = foodRepository.findByName(foodName).get();

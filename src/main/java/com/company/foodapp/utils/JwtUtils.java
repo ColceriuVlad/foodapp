@@ -1,7 +1,7 @@
 package com.company.foodapp.utils;
 
 import com.company.foodapp.core.PropertiesFileReader;
-import com.company.foodapp.dto.JwtDetails;
+import com.company.foodapp.dto.UserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParser;
@@ -27,7 +27,7 @@ public class JwtUtils {
         this.jwtParser = jwtParser;
     }
 
-    public String createJWT(JwtDetails jwtDetails) {
+    public String createJWT(UserDetails userDetails) {
         //The JWT signature algorithm we will be using to sign the token
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
@@ -40,14 +40,13 @@ public class JwtUtils {
 
         //Let's set the JWT Claims
         jwtBuilder.setIssuedAt(now)
-                .setSubject(jwtDetails.subject)
-                .setIssuer(jwtDetails.id)
-                .claim("role", jwtDetails.role)
+                .setSubject(userDetails.subject)
+                .claim("role", userDetails.role)
                 .signWith(signatureAlgorithm, signingKey);
 
         //if it has been specified, let's add the expiration
-        if (jwtDetails.duration > 0) {
-            long expMillis = nowMillis + jwtDetails.duration;
+        if (userDetails.duration > 0) {
+            long expMillis = nowMillis + userDetails.duration;
             Date exp = new Date(expMillis);
             jwtBuilder.setExpiration(exp);
         }

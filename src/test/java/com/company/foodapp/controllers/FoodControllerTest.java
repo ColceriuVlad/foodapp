@@ -4,6 +4,7 @@ import com.company.foodapp.models.Food;
 import com.company.foodapp.models.Supplier;
 import com.company.foodapp.repositories.FoodRepository;
 import com.company.foodapp.repositories.SupplierRepository;
+import com.company.foodapp.services.FoodService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -16,15 +17,17 @@ import static org.mockito.Mockito.when;
 
 public class FoodControllerTest {
     private FoodRepository foodRepository;
+    private FoodService foodService;
     private SupplierRepository supplierRepository;
     private Logger logger;
     private FoodController foodController;
 
     public FoodControllerTest() {
         foodRepository = mock(FoodRepository.class);
+        foodService = mock(FoodService.class);
         supplierRepository = mock(SupplierRepository.class);
         logger = mock(Logger.class);
-        foodController = new FoodController(foodRepository, supplierRepository, logger);
+        foodController = new FoodController(foodRepository, foodService, supplierRepository, logger);
     }
 
     @Test
