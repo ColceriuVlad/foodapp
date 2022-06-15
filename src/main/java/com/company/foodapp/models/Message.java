@@ -1,6 +1,7 @@
 package com.company.foodapp.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 @Entity
 @Table(name = "Message")
@@ -12,6 +13,8 @@ public class Message {
     public String role;
     public String name;
     public String description;
+    @Email
+    public String email;
 
     public Message() {
 

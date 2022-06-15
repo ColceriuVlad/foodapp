@@ -14,6 +14,7 @@ public class MessageMapper {
 
         message.username = userDetails.subject;
         message.role = userDetails.role;
+        message.email = userDetails.email;
 
         return message;
     }

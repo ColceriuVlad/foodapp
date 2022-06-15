@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ClaimsToUserDetailsMapper {
     public UserDetails map(Claims claims) {
-        return new UserDetails(claims.getSubject(), claims.get("role").toString());
+        return new UserDetails(claims.getSubject(), claims.get("role").toString(), claims.get("email").toString());
     }
 }

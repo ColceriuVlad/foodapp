@@ -1,15 +1,14 @@
 package com.company.foodapp.controllers;
 
 import com.company.foodapp.dto.MessageDetails;
-import com.company.foodapp.handlers.AuthHandler;
+import com.company.foodapp.dto.UserDetails;
 import com.company.foodapp.mappers.ClaimsToUserDetailsMapper;
 import com.company.foodapp.mappers.MessageMapper;
 import com.company.foodapp.models.Message;
 import com.company.foodapp.repositories.MessageRepository;
+import com.company.foodapp.services.HttpService;
 import com.company.foodapp.utils.CookieUtils;
 import com.company.foodapp.utils.JwtUtils;
-import com.kastkode.springsandwich.filter.annotation.Before;
-import com.kastkode.springsandwich.filter.annotation.BeforeElement;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,15 +26,17 @@ public class MessageController {
     private JwtUtils jwtUtils;
     private ClaimsToUserDetailsMapper claimsToUserDetailsMapper;
     private MessageMapper messageMapper;
+    private HttpService httpService;
     private Logger logger;
 
     @Autowired
-    public MessageController(MessageRepository messageRepository, CookieUtils cookieUtils, JwtUtils jwtUtils, ClaimsToUserDetailsMapper claimsToUserDetailsMapper, MessageMapper messageMapper, Logger logger) {
+    public MessageController(MessageRepository messageRepository, CookieUtils cookieUtils, JwtUtils jwtUtils, ClaimsToUserDetailsMapper claimsToUserDetailsMapper, MessageMapper messageMapper, HttpService httpService, Logger logger) {
         this.messageRepository = messageRepository;
         this.cookieUtils = cookieUtils;
         this.jwtUtils = jwtUtils;
         this.claimsToUserDetailsMapper = claimsToUserDetailsMapper;
         this.messageMapper = messageMapper;
+        this.httpService = httpService;
         this.logger = logger;
     }
 
@@ -58,14 +59,11 @@ public class MessageController {
     }
 
     @PostMapping
-    @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
     public ResponseEntity insertMessage(@RequestBody MessageDetails messageDetails, HttpServletRequest httpServletRequest) {
         ResponseEntity response;
 
         try {
-            var token = cookieUtils.getCookieValue("token", httpServletRequest);
-            var claims = jwtUtils.decodeJWT(token);
-            var userDetails = claimsToUserDetailsMapper.map(claims);
+            var userDetails = httpService.getUserDetails(httpServletRequest);
             var message = messageMapper.map(messageDetails, userDetails);
             messageRepository.save(message);
 

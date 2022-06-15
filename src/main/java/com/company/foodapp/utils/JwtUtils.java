@@ -42,6 +42,7 @@ public class JwtUtils {
         jwtBuilder.setIssuedAt(now)
                 .setSubject(userDetails.subject)
                 .claim("role", userDetails.role)
+                .claim("email", userDetails.email)
                 .signWith(signatureAlgorithm, signingKey);
 
         //if it has been specified, let's add the expiration

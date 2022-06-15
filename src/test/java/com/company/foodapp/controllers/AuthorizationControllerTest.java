@@ -45,7 +45,7 @@ public class AuthorizationControllerTest {
         user.password = "password";
 
         var usersFromDB = new ArrayList<User>();
-        usersFromDB.add(new User(1, "username", "password", "admin"));
+        usersFromDB.add(new User(1, "username", "password", "admin", "vlad.colceriu@yahoo.com"));
 
         var expectedToken = "qwerqwerqweofijqwefoij";
 

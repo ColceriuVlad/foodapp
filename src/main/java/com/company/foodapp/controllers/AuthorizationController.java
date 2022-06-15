@@ -14,10 +14,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,6 +51,7 @@ public class AuthorizationController {
                 var userDetails = new UserDetails(
                         userFromDb.username,
                         userFromDb.role,
+                        userFromDb.email,
                         Long.parseLong(propertiesFileReader.getProperty("JWT_DURATION")));
 
                 jwtToken = jwtUtils.createJWT(userDetails);
@@ -75,7 +73,7 @@ public class AuthorizationController {
     }
 
 
-    @PostMapping("/getCurrentUserDetails")
+    @GetMapping("/getCurrentUserDetails")
     @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
     public UserDetails getCurrentUserDetails(HttpServletRequest httpServletRequest) {
         var authenticationToken = cookieUtils.getCookieValue("token", httpServletRequest);
