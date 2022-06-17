@@ -1,7 +1,7 @@
 package com.company.foodapp.controllers;
 
 import com.company.foodapp.core.PropertiesFileReader;
-import com.company.foodapp.mappers.ClaimsToUserDetailsMapper;
+import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
 import com.company.foodapp.utils.CookieUtils;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 public class AuthorizationControllerTest {
     private JwtUtils jwtUtils;
     private CookieUtils cookieUtils;
-    private ClaimsToUserDetailsMapper claimsToUserDetailsMapper;
+    private ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper;
     private UserRepository userRepository;
     private PropertiesFileReader propertiesFileReader;
     private Logger logger;
@@ -30,11 +30,11 @@ public class AuthorizationControllerTest {
     public AuthorizationControllerTest() {
         jwtUtils = mock(JwtUtils.class);
         cookieUtils = mock(CookieUtils.class);
-        claimsToUserDetailsMapper = mock(ClaimsToUserDetailsMapper.class);
+        claimsToAuthenticationDetailsMapper = mock(ClaimsToAuthenticationDetailsMapper.class);
         userRepository = mock(UserRepository.class);
         propertiesFileReader = mock(PropertiesFileReader.class);
         logger = mock(Logger.class);
-        authorizationController = new AuthorizationController(jwtUtils, cookieUtils, claimsToUserDetailsMapper, userRepository, propertiesFileReader, logger);
+        authorizationController = new AuthorizationController(jwtUtils, cookieUtils, claimsToAuthenticationDetailsMapper, userRepository, propertiesFileReader, logger);
     }
 
     @Test

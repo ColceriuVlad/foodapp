@@ -1,7 +1,7 @@
 package com.company.foodapp.utils;
 
 import com.company.foodapp.core.PropertiesFileReader;
-import com.company.foodapp.dto.UserDetails;
+import com.company.foodapp.dto.AuthenticationDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtBuilder;
@@ -33,21 +33,21 @@ public class JwtUtilsTest {
 
         var duration = Long.parseLong(propertiesFileReader.getProperty("JWT_DURATION"));
 
-        var userDetails = mock(UserDetails.class);
-        userDetails.subject = "test";
-        userDetails.role = "tester";
-        userDetails.duration = duration;
+        var authenticationDetails = mock(AuthenticationDetails.class);
+        authenticationDetails.subject = "test";
+        authenticationDetails.role = "tester";
+        authenticationDetails.duration = duration;
 
         var mockedBuilder = mock(JwtBuilder.class);
         var expectedToken = "weqfgertgrtop";
 
         when(jwtBuilder.setIssuedAt(anyObject())).thenReturn(mockedBuilder);
-        when(mockedBuilder.setSubject(userDetails.subject)).thenReturn(mockedBuilder);
-        when(mockedBuilder.claim("role", userDetails.role)).thenReturn(mockedBuilder);
+        when(mockedBuilder.setSubject(authenticationDetails.subject)).thenReturn(mockedBuilder);
+        when(mockedBuilder.claim("role", authenticationDetails.role)).thenReturn(mockedBuilder);
         when(mockedBuilder.signWith(anyObject(), anyString())).thenReturn(mockedBuilder);
         when(jwtBuilder.compact()).thenReturn(expectedToken);
 
-        var actualToken = jwtUtils.createJWT(userDetails);
+        var actualToken = jwtUtils.createJWT(authenticationDetails);
         Assertions.assertEquals(expectedToken, actualToken);
     }
 

@@ -1,9 +1,9 @@
 package com.company.foodapp.controllers;
 
 import com.company.foodapp.core.PropertiesFileReader;
-import com.company.foodapp.dto.UserDetails;
+import com.company.foodapp.dto.AuthenticationDetails;
 import com.company.foodapp.handlers.AuthHandler;
-import com.company.foodapp.mappers.ClaimsToUserDetailsMapper;
+import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
 import com.company.foodapp.utils.CookieUtils;
@@ -24,16 +24,16 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthorizationController {
     private JwtUtils jwtUtils;
     private CookieUtils cookieUtils;
-    private ClaimsToUserDetailsMapper claimsToUserDetailsMapper;
+    private ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper;
     private UserRepository userRepository;
     private PropertiesFileReader propertiesFileReader;
     private Logger logger;
 
     @Autowired
-    public AuthorizationController(JwtUtils jwtUtils, CookieUtils cookieUtils, ClaimsToUserDetailsMapper claimsToUserDetailsMapper, UserRepository userRepository, PropertiesFileReader propertiesFileReader, Logger logger) {
+    public AuthorizationController(JwtUtils jwtUtils, CookieUtils cookieUtils, ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper, UserRepository userRepository, PropertiesFileReader propertiesFileReader, Logger logger) {
         this.jwtUtils = jwtUtils;
         this.cookieUtils = cookieUtils;
-        this.claimsToUserDetailsMapper = claimsToUserDetailsMapper;
+        this.claimsToAuthenticationDetailsMapper = claimsToAuthenticationDetailsMapper;
         this.userRepository = userRepository;
         this.propertiesFileReader = propertiesFileReader;
         this.logger = logger;
@@ -48,13 +48,13 @@ public class AuthorizationController {
 
         for (var userFromDb : usersFromDb) {
             if (user.username.equals(userFromDb.username) && user.password.equals(userFromDb.password)) {
-                var userDetails = new UserDetails(
+                var authenticationDetails = new AuthenticationDetails(
                         userFromDb.username,
                         userFromDb.role,
                         userFromDb.email,
                         Long.parseLong(propertiesFileReader.getProperty("JWT_DURATION")));
 
-                jwtToken = jwtUtils.createJWT(userDetails);
+                jwtToken = jwtUtils.createJWT(authenticationDetails);
             }
         }
 
@@ -73,14 +73,14 @@ public class AuthorizationController {
     }
 
 
-    @GetMapping("/getCurrentUserDetails")
+    @GetMapping("/getCurrentAuthenticationDetails")
     @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
-    public UserDetails getCurrentUserDetails(HttpServletRequest httpServletRequest) {
+    public AuthenticationDetails getCurrentAuthenticationDetails(HttpServletRequest httpServletRequest) {
         var authenticationToken = cookieUtils.getCookieValue("token", httpServletRequest);
 
         var claims = jwtUtils.decodeJWT(authenticationToken);
-        var userDetails = claimsToUserDetailsMapper.map(claims);
+        var authenticationDetails = claimsToAuthenticationDetailsMapper.map(claims);
 
-        return userDetails;
+        return authenticationDetails;
     }
 }
