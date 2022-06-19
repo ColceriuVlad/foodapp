@@ -24,7 +24,6 @@ public class FoodService {
         var foodList = foodRepository.findAll();
         var parsedFoodList = new ArrayList<Food>();
 
-
         if (!foodList.isEmpty()) {
             logger.info("Successfully retrieved all the food types of the application");
 

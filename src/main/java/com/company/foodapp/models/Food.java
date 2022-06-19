@@ -11,7 +11,7 @@ public class Food {
     public String name;
     public int price;
     public String currency;
-    public float discount;
+    public Double discount;
     @ManyToOne
     public Supplier supplier;
 
@@ -19,7 +19,7 @@ public class Food {
 
     }
 
-    public Food(int id, String name, int price, float discount) {
+    public Food(int id, String name, int price, Double discount) {
         this.id = id;
         this.name = name;
         this.price = price;

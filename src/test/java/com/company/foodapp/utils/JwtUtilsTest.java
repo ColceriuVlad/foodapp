@@ -44,6 +44,7 @@ public class JwtUtilsTest {
         when(jwtBuilder.setIssuedAt(anyObject())).thenReturn(mockedBuilder);
         when(mockedBuilder.setSubject(authenticationDetails.subject)).thenReturn(mockedBuilder);
         when(mockedBuilder.claim("role", authenticationDetails.role)).thenReturn(mockedBuilder);
+        when(mockedBuilder.claim("email", authenticationDetails.email)).thenReturn(mockedBuilder);
         when(mockedBuilder.signWith(anyObject(), anyString())).thenReturn(mockedBuilder);
         when(jwtBuilder.compact()).thenReturn(expectedToken);
 
