@@ -66,6 +66,7 @@ public class AuthorizationController {
             response = new ResponseEntity(HttpStatus.OK);
         } else {
             logger.info("User was not authenticated");
+
             response = new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
 

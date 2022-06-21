@@ -70,6 +70,7 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'com.kastkode:springsandwich:1.0.2'
+    implementation 'com.sun.mail:javax.mail:1.6.2'
     runtimeOnly 'mysql:mysql-connector-java'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'

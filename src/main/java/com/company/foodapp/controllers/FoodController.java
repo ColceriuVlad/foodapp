@@ -78,6 +78,7 @@ public class FoodController {
             response = new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
             logger.info("Could not add food: " + food.name + " to supplier: " + supplierName);
+
             response = new ResponseEntity(HttpStatus.NOT_FOUND);
         }
 
