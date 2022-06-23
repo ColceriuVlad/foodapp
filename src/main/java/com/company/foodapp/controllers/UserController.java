@@ -1,8 +1,12 @@
 package com.company.foodapp.controllers;
 
 import com.company.foodapp.handlers.AuthHandler;
+import com.company.foodapp.models.Email;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
+import com.company.foodapp.services.HttpService;
+import com.company.foodapp.utils.StringUtils;
+import com.company.foodapp.validators.UserValidator;
 import com.kastkode.springsandwich.filter.annotation.Before;
 import com.kastkode.springsandwich.filter.annotation.BeforeElement;
 import org.slf4j.Logger;
@@ -19,11 +23,17 @@ import java.util.NoSuchElementException;
 public class UserController {
     private UserRepository userRepository;
     private Logger logger;
+    private UserValidator userValidator;
+    private StringUtils stringUtils;
+    private HttpService httpService;
 
     @Autowired
-    public UserController(UserRepository userRepository, Logger logger) {
+    public UserController(UserRepository userRepository, Logger logger, UserValidator userValidator, StringUtils stringUtils, HttpService httpService) {
         this.userRepository = userRepository;
         this.logger = logger;
+        this.userValidator = userValidator;
+        this.stringUtils = stringUtils;
+        this.httpService = httpService;
     }
 
     @GetMapping
@@ -65,19 +75,51 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity insertUser(@RequestBody User user) {
-        ResponseEntity response;
+        var validationCode = stringUtils.generateValidationCode();
+        user.validationCode = validationCode;
+        user.activated = false;
+        var validatedUser = userValidator.getValidatedUserDetails(user);
 
-        if (user.username != null && user.password != null && user.role != null) {
+        if (validatedUser != null) {
             userRepository.save(user);
             logger.info("User was saved in the database");
 
-            response = new ResponseEntity(HttpStatus.OK);
+            var email = new Email(user.email, "Validation code confirmation", "Your validation code is " + validationCode);
+            var sendEmailStatus = httpService.sendEmailAndGetStatus(email);
+
+            if (sendEmailStatus == HttpStatus.OK) {
+                logger.info("Registration confirmation email was sent");
+
+                return new ResponseEntity(HttpStatus.OK);
+            } else {
+                logger.info("Could not send registration confirmation email");
+
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
+
         } else {
             logger.info("User was not saved in the database");
 
-            response = new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+    }
 
-        return response;
+    @PutMapping("validation/{validationCode}")
+    public ResponseEntity validateUser(@PathVariable String validationCode) {
+        User user = null;
+
+        try {
+            user = userRepository.findByValidationCode(validationCode).get();
+            logger.info("Successfully found user with validation code" + validationCode);
+            user.validationCode = null;
+            user.activated = true;
+            userRepository.save(user);
+
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception exception) {
+            logger.info("Could not find user with validation code " + validationCode);
+
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 }

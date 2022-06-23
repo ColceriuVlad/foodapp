@@ -24,12 +24,6 @@ public class DependenciesConfiguration {
     }
 
     @Bean
-    @Scope("singleton")
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }
-
-    @Bean
     @Scope("prototype")
     public JwtBuilder jwtBuilder() {
         return Jwts.builder();
@@ -39,5 +33,11 @@ public class DependenciesConfiguration {
     @Scope("prototype")
     public JwtParser jwtParser() {
         return Jwts.parser();
+    }
+
+    @Bean
+    @Scope("singleton")
+    public ObjectMapper objectMapper(){
+        return new ObjectMapper();
     }
 }

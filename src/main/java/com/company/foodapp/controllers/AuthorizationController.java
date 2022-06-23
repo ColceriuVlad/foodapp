@@ -6,6 +6,7 @@ import com.company.foodapp.handlers.AuthHandler;
 import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
+import com.company.foodapp.services.HttpService;
 import com.company.foodapp.utils.CookieUtils;
 import com.company.foodapp.utils.JwtUtils;
 import com.kastkode.springsandwich.filter.annotation.Before;
@@ -39,38 +40,32 @@ public class AuthorizationController {
         this.logger = logger;
     }
 
-
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody User user, HttpServletResponse httpServletResponse) {
         var usersFromDb = userRepository.findAll();
-        ResponseEntity response = null;
-        String jwtToken = null;
 
         for (var userFromDb : usersFromDb) {
             if (user.username.equals(userFromDb.username) && user.password.equals(userFromDb.password)) {
+                if (userFromDb.activated == false) {
+                    logger.info("User is not validated, please perform the email validation");
+
+                    return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+                }
                 var authenticationDetails = new AuthenticationDetails(
                         userFromDb.username,
                         userFromDb.role,
                         userFromDb.email,
                         Long.parseLong(propertiesFileReader.getProperty("JWT_DURATION")));
 
-                jwtToken = jwtUtils.createJWT(authenticationDetails);
+                var jwtToken = jwtUtils.createJWT(authenticationDetails);
+                logger.info("User has logged in successfully");
+                cookieUtils.createCookie("token", jwtToken, httpServletResponse);
+                return new ResponseEntity(HttpStatus.OK);
             }
         }
 
-        if (jwtToken != null) {
-            logger.info("User has logged in successfully");
-
-            cookieUtils.createCookie("token", jwtToken, httpServletResponse);
-
-            response = new ResponseEntity(HttpStatus.OK);
-        } else {
-            logger.info("User was not authenticated");
-
-            response = new ResponseEntity(HttpStatus.UNAUTHORIZED);
-        }
-
-        return response;
+        logger.info("User was not authenticated");
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 
 

@@ -14,6 +14,8 @@ public class User {
     public String role;
     @Email
     public String email;
+    public String validationCode;
+    public Boolean activated = false;
 
     public User() {
 

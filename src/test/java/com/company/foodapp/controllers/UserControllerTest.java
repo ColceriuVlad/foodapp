@@ -2,10 +2,14 @@ package com.company.foodapp.controllers;
 
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
+import com.company.foodapp.services.HttpService;
+import com.company.foodapp.utils.StringUtils;
+import com.company.foodapp.validators.UserValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -17,11 +21,17 @@ public class UserControllerTest {
     private UserRepository userRepository;
     private Logger logger;
     private UserController userController;
+    private UserValidator userValidator;
+    private StringUtils stringUtils;
+    private HttpService httpService;
 
     public UserControllerTest() {
         userRepository = mock(UserRepository.class);
         logger = mock(Logger.class);
-        userController = new UserController(userRepository, logger);
+        userValidator = mock(UserValidator.class);
+        stringUtils = mock(StringUtils.class);
+        httpService = mock(HttpService.class);
+        userController = new UserController(userRepository, logger, userValidator, stringUtils, httpService);
     }
 
     @Test
