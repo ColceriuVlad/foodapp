@@ -8,6 +8,7 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
@@ -18,12 +19,14 @@ public class JwtUtilsTest {
     private JwtBuilder jwtBuilder;
     private JwtUtils jwtUtils;
     private JwtParser jwtParser;
+    private Logger logger;
 
     public JwtUtilsTest() {
         propertiesFileReader = mock(PropertiesFileReader.class);
         jwtBuilder = mock(JwtBuilder.class);
         jwtParser = mock(JwtParser.class);
-        jwtUtils = new JwtUtils(propertiesFileReader, jwtBuilder, jwtParser);
+        logger = mock(Logger.class);
+        jwtUtils = new JwtUtils(propertiesFileReader, jwtBuilder, jwtParser, logger);
     }
 
     @Test

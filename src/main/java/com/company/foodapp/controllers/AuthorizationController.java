@@ -6,7 +6,6 @@ import com.company.foodapp.handlers.AuthHandler;
 import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
-import com.company.foodapp.services.HttpService;
 import com.company.foodapp.utils.CookieUtils;
 import com.company.foodapp.utils.JwtUtils;
 import com.kastkode.springsandwich.filter.annotation.Before;

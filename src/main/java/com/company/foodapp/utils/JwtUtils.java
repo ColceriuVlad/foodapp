@@ -6,6 +6,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,12 +20,14 @@ public class JwtUtils {
     private PropertiesFileReader propertiesFileReader;
     private JwtBuilder jwtBuilder;
     private JwtParser jwtParser;
+    private Logger logger;
 
     @Autowired
-    public JwtUtils(PropertiesFileReader propertiesFileReader, JwtBuilder jwtBuilder, JwtParser jwtParser) {
+    public JwtUtils(PropertiesFileReader propertiesFileReader, JwtBuilder jwtBuilder, JwtParser jwtParser, Logger logger) {
         this.propertiesFileReader = propertiesFileReader;
         this.jwtBuilder = jwtBuilder;
         this.jwtParser = jwtParser;
+        this.logger = logger;
     }
 
     public String createJWT(AuthenticationDetails authenticationDetails) {
@@ -57,14 +60,20 @@ public class JwtUtils {
     }
 
     public Claims decodeJWT(String jwt) {
-        //This line will throw an exception if it is not a signed JWS (as expected)
+        try {
+            var jwtSecret = propertiesFileReader.getProperty("JWT_SECRET");
+            var convertedJwtSecret = DatatypeConverter.parseBase64Binary(jwtSecret);
+            var parserWithSigningKey = jwtParser.setSigningKey(convertedJwtSecret);
+            var parsedClaims = parserWithSigningKey.parseClaimsJws(jwt);
+            var parsedClaimsBody = parsedClaims.getBody();
 
-        var jwtSecret = propertiesFileReader.getProperty("JWT_SECRET");
-        var convertedJwtSecret = DatatypeConverter.parseBase64Binary(jwtSecret);
-        var parserWithSigningKey = jwtParser.setSigningKey(convertedJwtSecret);
-        var parsedClaims = parserWithSigningKey.parseClaimsJws(jwt);
-        var parsedClaimsBody = parsedClaims.getBody();
+            logger.info("Successfully retrieved claims from the provided token");
 
-        return parsedClaimsBody;
+            return parsedClaimsBody;
+        } catch (Exception exception) {
+            logger.info("Could not retrieve claims from the provided token");
+
+            return null;
+        }
     }
 }

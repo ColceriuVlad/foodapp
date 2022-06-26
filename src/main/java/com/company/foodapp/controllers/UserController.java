@@ -4,7 +4,7 @@ import com.company.foodapp.handlers.AuthHandler;
 import com.company.foodapp.models.Email;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
-import com.company.foodapp.services.HttpService;
+import com.company.foodapp.services.EmailService;
 import com.company.foodapp.utils.StringUtils;
 import com.company.foodapp.validators.UserValidator;
 import com.kastkode.springsandwich.filter.annotation.Before;
@@ -25,15 +25,15 @@ public class UserController {
     private Logger logger;
     private UserValidator userValidator;
     private StringUtils stringUtils;
-    private HttpService httpService;
+    private EmailService emailService;
 
     @Autowired
-    public UserController(UserRepository userRepository, Logger logger, UserValidator userValidator, StringUtils stringUtils, HttpService httpService) {
+    public UserController(UserRepository userRepository, Logger logger, UserValidator userValidator, StringUtils stringUtils, EmailService emailService) {
         this.userRepository = userRepository;
         this.logger = logger;
         this.userValidator = userValidator;
         this.stringUtils = stringUtils;
-        this.httpService = httpService;
+        this.emailService = emailService;
     }
 
     @GetMapping
@@ -82,23 +82,20 @@ public class UserController {
 
         if (validatedUser != null) {
             userRepository.save(user);
-            logger.info("User was saved in the database");
+            logger.info("User was validated and saved in the database");
 
             var email = new Email(user.email, "Validation code confirmation", "Your validation code is " + validationCode);
-            var sendEmailStatus = httpService.sendEmailAndGetStatus(email);
+            var couldSendEmail = emailService.sendMessage(email);
 
-            if (sendEmailStatus == HttpStatus.OK) {
-                logger.info("Registration confirmation email was sent");
-
+            if (couldSendEmail == true) {
+                logger.info("Validation email was sent successfully to user " + user.username);
                 return new ResponseEntity(HttpStatus.OK);
             } else {
-                logger.info("Could not send registration confirmation email");
-
+                logger.info("Could not send validation email to user " + user.username);
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
-
         } else {
-            logger.info("User was not saved in the database");
+            logger.info("User was not validated");
 
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }

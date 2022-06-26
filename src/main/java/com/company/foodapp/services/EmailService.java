@@ -48,7 +48,7 @@ public class EmailService {
         return session;
     }
 
-    public void sendMessage(Email email) throws MessagingException {
+    public boolean sendMessage(Email email) {
         var mimeMessage = new MimeMessage(session);
 
         try {
@@ -65,9 +65,10 @@ public class EmailService {
 
             Transport.send(mimeMessage);
             logger.info("Email was sent to " + propertiesFileReader.getProperty("GMAIL_FROM"));
+            return true;
         } catch (MessagingException messagingException) {
             logger.info("Email could not be sent");
-            throw messagingException;
+            return false;
         }
     }
 }
