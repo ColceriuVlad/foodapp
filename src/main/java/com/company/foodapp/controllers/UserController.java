@@ -2,6 +2,7 @@ package com.company.foodapp.controllers;
 
 import com.company.foodapp.handlers.AuthHandler;
 import com.company.foodapp.models.Email;
+import com.company.foodapp.models.ErrorResponse;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
 import com.company.foodapp.services.EmailService;
@@ -91,13 +92,18 @@ public class UserController {
                 logger.info("Validation email was sent successfully to user " + user.username);
                 return new ResponseEntity(HttpStatus.OK);
             } else {
-                logger.info("Could not send validation email to user " + user.username);
-                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+                var errorMessage = "Could not send validation email to user " + user.username;
+                logger.info(errorMessage);
+
+                var errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage);
+                return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
             }
         } else {
-            logger.info("User was not validated");
+            var errorMessage = "User was not validated";
+            logger.info(errorMessage);
 
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            var errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage);
+            return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -114,9 +120,11 @@ public class UserController {
 
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception exception) {
-            logger.info("Could not find user with validation code " + validationCode);
+            var errorMessage = "Could not find user with validation code " + validationCode;
+            logger.info(errorMessage);
 
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            var errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorMessage);
+            return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
         }
     }
 }
