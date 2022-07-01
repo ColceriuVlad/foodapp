@@ -1,16 +1,16 @@
 package com.company.foodapp.mappers;
 
-import com.company.foodapp.dto.MessageDetails;
-import com.company.foodapp.dto.AuthenticationDetails;
+import com.company.foodapp.dto.MessageDto;
+import com.company.foodapp.models.AuthenticationDetails;
 import com.company.foodapp.models.Message;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MessageMapper {
-    public Message map(MessageDetails messageDetails, AuthenticationDetails authenticationDetails) {
+    public Message map(MessageDto messageDto, AuthenticationDetails authenticationDetails) {
         var message = new Message();
-        message.description = messageDetails.description;
-        message.name = messageDetails.name;
+        message.description = messageDto.description;
+        message.name = messageDto.name;
 
         message.username = authenticationDetails.subject;
         message.role = authenticationDetails.role;
@@ -19,11 +19,11 @@ public class MessageMapper {
         return message;
     }
 
-    public Message map(MessageDetails messageDetails) {
+    public Message map(MessageDto messageDto) {
         var message = new Message();
-        message.description = messageDetails.description;
-        message.name = messageDetails.name;
-        message.email = messageDetails.email;
+        message.description = messageDto.description;
+        message.name = messageDto.name;
+        message.email = messageDto.email;
 
         return message;
     }

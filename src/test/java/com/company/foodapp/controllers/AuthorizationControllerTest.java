@@ -1,11 +1,14 @@
 package com.company.foodapp.controllers;
 
 import com.company.foodapp.core.PropertiesFileReader;
+import com.company.foodapp.models.AuthenticationDetails;
 import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
+import com.company.foodapp.services.EmailService;
 import com.company.foodapp.utils.CookieUtils;
 import com.company.foodapp.utils.JwtUtils;
+import com.company.foodapp.utils.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -14,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
-import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -26,6 +29,8 @@ public class AuthorizationControllerTest {
     private PropertiesFileReader propertiesFileReader;
     private Logger logger;
     private AuthorizationController authorizationController;
+    private EmailService emailService;
+    private StringUtils stringUtils;
 
     public AuthorizationControllerTest() {
         jwtUtils = mock(JwtUtils.class);
@@ -34,7 +39,9 @@ public class AuthorizationControllerTest {
         userRepository = mock(UserRepository.class);
         propertiesFileReader = mock(PropertiesFileReader.class);
         logger = mock(Logger.class);
-        authorizationController = new AuthorizationController(jwtUtils, cookieUtils, claimsToAuthenticationDetailsMapper, userRepository, propertiesFileReader, logger);
+        emailService = mock(EmailService.class);
+        stringUtils = mock(StringUtils.class);
+        authorizationController = new AuthorizationController(jwtUtils, cookieUtils, claimsToAuthenticationDetailsMapper, userRepository, propertiesFileReader, logger, emailService, stringUtils);
     }
 
     @Test
@@ -49,9 +56,9 @@ public class AuthorizationControllerTest {
 
         var expectedToken = "qwerqwerqweofijqwefoij";
 
-        when(propertiesFileReader.getProperty("JWT_DURATION")).thenReturn("1000");
+        when(propertiesFileReader.getProperty("JWT_AUTHENTICATION_TOKEN_DURATION")).thenReturn("1000");
         when(userRepository.findAll()).thenReturn(usersFromDB);
-        when(jwtUtils.createJWT(anyObject())).thenReturn(expectedToken);
+        when(jwtUtils.createJWT(any(AuthenticationDetails.class))).thenReturn(expectedToken);
 
         var response = authorizationController.login(user, servletResponse);
         var responseBody = response.getBody();

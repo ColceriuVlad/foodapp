@@ -2,7 +2,10 @@ package com.company.foodapp.controllers;
 
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
+import com.company.foodapp.services.AuthorizationService;
 import com.company.foodapp.services.EmailService;
+import com.company.foodapp.utils.CookieUtils;
+import com.company.foodapp.utils.JwtUtils;
 import com.company.foodapp.utils.StringUtils;
 import com.company.foodapp.validators.UserValidator;
 import org.junit.jupiter.api.Assertions;
@@ -24,6 +27,9 @@ public class UserControllerTest {
     private UserValidator userValidator;
     private StringUtils stringUtils;
     private EmailService emailService;
+    private CookieUtils cookieUtils;
+    private JwtUtils jwtUtils;
+    private AuthorizationService authorizationService;
 
     public UserControllerTest() {
         userRepository = mock(UserRepository.class);
@@ -31,7 +37,10 @@ public class UserControllerTest {
         userValidator = mock(UserValidator.class);
         stringUtils = mock(StringUtils.class);
         emailService = mock(EmailService.class);
-        userController = new UserController(userRepository, logger, userValidator, stringUtils, emailService);
+        cookieUtils = mock(CookieUtils.class);
+        jwtUtils = mock(JwtUtils.class);
+        authorizationService = mock(AuthorizationService.class);
+        userController = new UserController(userRepository, logger, userValidator, stringUtils, emailService, cookieUtils, jwtUtils, authorizationService);
     }
 
     @Test

@@ -34,6 +34,23 @@ public class CookieUtils {
         }
     }
 
+    public void deleteCookie(String cookieName, HttpServletResponse httpServletResponse) {
+        var cookie = new Cookie(cookieName, null);
+
+        try {
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+            cookie.setSecure(false);
+            cookie.setHttpOnly(true);
+            httpServletResponse.addCookie(cookie);
+            httpServletResponse.addHeader("Access-Control-Allow-Credentials", "true");
+
+            logger.info("Successfully deleted cookie");
+        } catch (Exception exception) {
+            logger.info("Could not delete cookie");
+        }
+    }
+
     public String getCookieValue(String cookieName, HttpServletRequest httpServletRequest) {
         var cookies = httpServletRequest.getCookies();
         String cookieValue = null;

@@ -1,13 +1,17 @@
 package com.company.foodapp.controllers;
 
 import com.company.foodapp.core.PropertiesFileReader;
-import com.company.foodapp.dto.AuthenticationDetails;
 import com.company.foodapp.handlers.AuthHandler;
 import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
+import com.company.foodapp.models.AuthenticationDetails;
+import com.company.foodapp.models.Email;
+import com.company.foodapp.models.ForgotPasswordDetails;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
+import com.company.foodapp.services.EmailService;
 import com.company.foodapp.utils.CookieUtils;
 import com.company.foodapp.utils.JwtUtils;
+import com.company.foodapp.utils.StringUtils;
 import com.kastkode.springsandwich.filter.annotation.Before;
 import com.kastkode.springsandwich.filter.annotation.BeforeElement;
 import org.slf4j.Logger;
@@ -28,15 +32,19 @@ public class AuthorizationController {
     private UserRepository userRepository;
     private PropertiesFileReader propertiesFileReader;
     private Logger logger;
+    private EmailService emailService;
+    private StringUtils stringUtils;
 
     @Autowired
-    public AuthorizationController(JwtUtils jwtUtils, CookieUtils cookieUtils, ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper, UserRepository userRepository, PropertiesFileReader propertiesFileReader, Logger logger) {
+    public AuthorizationController(JwtUtils jwtUtils, CookieUtils cookieUtils, ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper, UserRepository userRepository, PropertiesFileReader propertiesFileReader, Logger logger, EmailService emailService, StringUtils stringUtils) {
         this.jwtUtils = jwtUtils;
         this.cookieUtils = cookieUtils;
         this.claimsToAuthenticationDetailsMapper = claimsToAuthenticationDetailsMapper;
         this.userRepository = userRepository;
         this.propertiesFileReader = propertiesFileReader;
         this.logger = logger;
+        this.emailService = emailService;
+        this.stringUtils = stringUtils;
     }
 
     @PostMapping("/login")
@@ -54,7 +62,7 @@ public class AuthorizationController {
                         userFromDb.username,
                         userFromDb.role,
                         userFromDb.email,
-                        Long.parseLong(propertiesFileReader.getProperty("JWT_DURATION")));
+                        Long.parseLong(propertiesFileReader.getProperty("JWT_AUTHENTICATION_TOKEN_DURATION")));
 
                 var jwtToken = jwtUtils.createJWT(authenticationDetails);
                 logger.info("User has logged in successfully");
@@ -77,5 +85,54 @@ public class AuthorizationController {
         var authenticationDetails = claimsToAuthenticationDetailsMapper.map(claims);
 
         return authenticationDetails;
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity resetPassword(@RequestBody User user, HttpServletResponse httpServletResponse) {
+        var usersFromDb = userRepository.findAll();
+
+        if (usersFromDb.isEmpty()) {
+            logger.info("Could not find any user in the application");
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } else {
+            logger.info("Successfully retrieved users from the application");
+        }
+
+        for (var userFromDb : usersFromDb) {
+            if (userFromDb.email.equals(user.email) && userFromDb.username.equals(user.username)) {
+                logger.info("Successfully found user " + user.username);
+
+                var validationCode = stringUtils.generateValidationCode();
+
+                var forgotPasswordDetails = new ForgotPasswordDetails(
+                        user.username,
+                        user.email,
+                        Long.parseLong(propertiesFileReader.getProperty("JWT_FORGOT_PASSWORD_TOKEN_DURATION")),
+                        validationCode,
+                        userFromDb.id);
+
+                var forgotPasswordToken = jwtUtils.createJWT(forgotPasswordDetails);
+                logger.info("Successfully created forgot password token");
+                cookieUtils.createCookie("forgotPassword", forgotPasswordToken, httpServletResponse);
+
+                var email = new Email(user.email, "Forgot password", "Your password reset code is " + validationCode);
+
+                var couldSendEmail = emailService.sendMessage(email);
+
+                if (couldSendEmail) {
+                    logger.info("Successfully sent password reset validation code to " + email.to);
+                } else {
+                    logger.info("Could not send email to " + email.to);
+
+                    return new ResponseEntity(HttpStatus.BAD_REQUEST);
+                }
+
+                return new ResponseEntity(HttpStatus.OK);
+            }
+        }
+
+        logger.info("Could not find the correspondent user in the database");
+
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 }

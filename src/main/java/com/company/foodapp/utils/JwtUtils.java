@@ -1,7 +1,8 @@
 package com.company.foodapp.utils;
 
 import com.company.foodapp.core.PropertiesFileReader;
-import com.company.foodapp.dto.AuthenticationDetails;
+import com.company.foodapp.models.AuthenticationDetails;
+import com.company.foodapp.models.ForgotPasswordDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParser;
@@ -51,6 +52,36 @@ public class JwtUtils {
         //if it has been specified, let's add the expiration
         if (authenticationDetails.duration > 0) {
             long expMillis = nowMillis + authenticationDetails.duration;
+            Date exp = new Date(expMillis);
+            jwtBuilder.setExpiration(exp);
+        }
+
+        //Builds the JWT and serializes it to a compact, URL-safe string
+        return jwtBuilder.compact();
+    }
+
+    public String createJWT(ForgotPasswordDetails forgotPasswordDetails) {
+        //The JWT signature algorithm we will be using to sign the token
+        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+
+        long nowMillis = System.currentTimeMillis();
+        Date now = new Date(nowMillis);
+
+        //We will sign our JWT with our ApiKey secret
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(propertiesFileReader.getProperty("JWT_SECRET"));
+        Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+
+        //Let's set the JWT Claims
+        jwtBuilder.setIssuedAt(now)
+                .setSubject(forgotPasswordDetails.username)
+                .claim("email", forgotPasswordDetails.email)
+                .claim("validationCode", forgotPasswordDetails.validationCode)
+                .claim("id", forgotPasswordDetails.id)
+                .signWith(signatureAlgorithm, signingKey);
+
+        //if it has been specified, let's add the expiration
+        if (forgotPasswordDetails.duration > 0) {
+            long expMillis = nowMillis + forgotPasswordDetails.duration;
             Date exp = new Date(expMillis);
             jwtBuilder.setExpiration(exp);
         }

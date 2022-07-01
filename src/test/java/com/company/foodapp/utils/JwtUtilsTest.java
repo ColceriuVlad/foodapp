@@ -1,7 +1,7 @@
 package com.company.foodapp.utils;
 
 import com.company.foodapp.core.PropertiesFileReader;
-import com.company.foodapp.dto.AuthenticationDetails;
+import com.company.foodapp.models.AuthenticationDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtBuilder;
@@ -32,9 +32,9 @@ public class JwtUtilsTest {
     @Test
     public void createJWT() {
         when(propertiesFileReader.getProperty("JWT_SECRET")).thenReturn("A3EEF668F2CF5061CFA55FA09A88A7CA50086C88374EC0AD24B70550B942CFB9");
-        when(propertiesFileReader.getProperty("JWT_DURATION")).thenReturn("100000");
+        when(propertiesFileReader.getProperty("JWT_AUTHENTICATION_TOKEN_DURATION")).thenReturn("100000");
 
-        var duration = Long.parseLong(propertiesFileReader.getProperty("JWT_DURATION"));
+        var duration = Long.parseLong(propertiesFileReader.getProperty("JWT_AUTHENTICATION_TOKEN_DURATION"));
 
         var authenticationDetails = mock(AuthenticationDetails.class);
         authenticationDetails.subject = "test";

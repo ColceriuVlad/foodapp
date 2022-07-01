@@ -1,6 +1,6 @@
 package com.company.foodapp.controllers;
 
-import com.company.foodapp.dto.MessageDetails;
+import com.company.foodapp.dto.MessageDto;
 import com.company.foodapp.handlers.AuthHandler;
 import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
 import com.company.foodapp.mappers.MessageMapper;
@@ -25,7 +25,7 @@ import java.util.List;
 public class MessageController {
     private MessageRepository messageRepository;
     private MessageMapper messageMapper;
-    private MessageDetailsValidator messageDetailsValidator;
+    private MessageDetailsValidator messageDtoValidator;
     private Logger logger;
     private CookieUtils cookieUtils;
     private JwtUtils jwtUtils;
@@ -35,7 +35,7 @@ public class MessageController {
     public MessageController(MessageRepository messageRepository, MessageMapper messageMapper, MessageDetailsValidator messageDetailsValidator, Logger logger, CookieUtils cookieUtils, JwtUtils jwtUtils, ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper) {
         this.messageRepository = messageRepository;
         this.messageMapper = messageMapper;
-        this.messageDetailsValidator = messageDetailsValidator;
+        this.messageDtoValidator = messageDetailsValidator;
         this.logger = logger;
         this.cookieUtils = cookieUtils;
         this.jwtUtils = jwtUtils;
@@ -62,16 +62,16 @@ public class MessageController {
     }
 
     @PostMapping
-    public ResponseEntity insertMessage(@RequestBody MessageDetails messageDetails, HttpServletRequest httpServletRequest) {
-        var authenticationTokenCookie = cookieUtils.getCookieValue("token", httpServletRequest);
+    public ResponseEntity insertMessage(@RequestBody MessageDto messageDto, HttpServletRequest httpServletRequest) {
+        var authenticationToken = cookieUtils.getCookieValue("token", httpServletRequest);
 
-        if (authenticationTokenCookie == null) {
+        if (authenticationToken == null) {
             logger.info("Could not retrieve authentication token");
         } else {
             logger.info("Authentication token was retrieved");
         }
 
-        var authenticationDetailsClaims = jwtUtils.decodeJWT(authenticationTokenCookie);
+        var authenticationDetailsClaims = jwtUtils.decodeJWT(authenticationToken);
 
         if (authenticationDetailsClaims == null) {
             logger.info("Could not decode authentication token");
@@ -83,10 +83,10 @@ public class MessageController {
 
         // If user is authenticated, include username and role in the message, otherwise send a message with just messageDetails
         if (authenticationDetails != null) {
-            var validatedMessageDetails = messageDetailsValidator.getValidatedMessageDetails(messageDetails);
+            var validatedMessageDto = messageDtoValidator.getValidatedMessageDto(messageDto);
 
-            if (validatedMessageDetails != null) {
-                var message = messageMapper.map(messageDetails, authenticationDetails);
+            if (validatedMessageDto != null) {
+                var message = messageMapper.map(messageDto, authenticationDetails);
                 messageRepository.save(message);
 
                 logger.info("Message was sent to the database by authenticated user " + authenticationDetails.subject);
@@ -96,10 +96,10 @@ public class MessageController {
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
         } else {
-            var validatedMessageDetails = messageDetailsValidator.getValidatedMessageDetailsWithEmail(messageDetails);
+            var validatedMessageDto = messageDtoValidator.getValidatedMessageDtoWithEmail(messageDto);
 
-            if (validatedMessageDetails != null) {
-                var message = messageMapper.map(messageDetails);
+            if (validatedMessageDto != null) {
+                var message = messageMapper.map(messageDto);
                 messageRepository.save(message);
 
                 logger.info("Message was sent to the database");

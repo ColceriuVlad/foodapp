@@ -1,4 +1,4 @@
-package com.company.foodapp.dto;
+package com.company.foodapp.models;
 
 import javax.validation.constraints.Email;
 

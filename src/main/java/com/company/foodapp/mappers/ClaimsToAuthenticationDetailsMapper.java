@@ -1,6 +1,6 @@
 package com.company.foodapp.mappers;
 
-import com.company.foodapp.dto.AuthenticationDetails;
+import com.company.foodapp.models.AuthenticationDetails;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

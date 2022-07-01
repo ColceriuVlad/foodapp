@@ -1,6 +1,6 @@
 package com.company.foodapp.validators;
 
-import com.company.foodapp.dto.MessageDetails;
+import com.company.foodapp.dto.MessageDto;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,24 +14,24 @@ public class MessageDetailsValidator {
         this.logger = logger;
     }
 
-    public MessageDetails getValidatedMessageDetails(MessageDetails messageDetails) {
-        if (messageDetails.name != null && messageDetails.description != null) {
-            logger.info("Message details were validated");
+    public MessageDto getValidatedMessageDto(MessageDto messageDto) {
+        if (messageDto.name != null && messageDto.description != null) {
+            logger.info("Message was validated");
 
-            return messageDetails;
+            return messageDto;
         } else {
-            logger.info("Message details were not validated");
+            logger.info("Message was not validated");
             return null;
         }
     }
 
-    public MessageDetails getValidatedMessageDetailsWithEmail(MessageDetails messageDetails) {
-        if (messageDetails.name != null && messageDetails.description != null && messageDetails.email != null) {
-            logger.info("Message details were validated (with email)");
+    public MessageDto getValidatedMessageDtoWithEmail(MessageDto messageDto) {
+        if (messageDto.name != null && messageDto.description != null && messageDto.email != null) {
+            logger.info("Message was validated (with email)");
 
-            return messageDetails;
+            return messageDto;
         } else {
-            logger.info("Message details were not validated (with email");
+            logger.info("Message was not validated (with email");
             return null;
         }
     }
