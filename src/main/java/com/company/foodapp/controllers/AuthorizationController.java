@@ -8,6 +8,7 @@ import com.company.foodapp.models.Email;
 import com.company.foodapp.models.ForgotPasswordDetails;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
+import com.company.foodapp.services.AuthorizationService;
 import com.company.foodapp.services.EmailService;
 import com.company.foodapp.utils.CookieUtils;
 import com.company.foodapp.utils.JwtUtils;
@@ -34,9 +35,10 @@ public class AuthorizationController {
     private Logger logger;
     private EmailService emailService;
     private StringUtils stringUtils;
+    private AuthorizationService authorizationService;
 
     @Autowired
-    public AuthorizationController(JwtUtils jwtUtils, CookieUtils cookieUtils, ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper, UserRepository userRepository, PropertiesFileReader propertiesFileReader, Logger logger, EmailService emailService, StringUtils stringUtils) {
+    public AuthorizationController(JwtUtils jwtUtils, CookieUtils cookieUtils, ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper, UserRepository userRepository, PropertiesFileReader propertiesFileReader, Logger logger, EmailService emailService, StringUtils stringUtils, AuthorizationService authorizationService) {
         this.jwtUtils = jwtUtils;
         this.cookieUtils = cookieUtils;
         this.claimsToAuthenticationDetailsMapper = claimsToAuthenticationDetailsMapper;
@@ -45,6 +47,7 @@ public class AuthorizationController {
         this.logger = logger;
         this.emailService = emailService;
         this.stringUtils = stringUtils;
+        this.authorizationService = authorizationService;
     }
 
     @PostMapping("/login")
@@ -134,5 +137,17 @@ public class AuthorizationController {
         logger.info("Could not find the correspondent user in the database");
 
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+    }
+
+
+    @PostMapping("logout")
+    public ResponseEntity logOut(HttpServletResponse httpServletResponse) {
+        var couldLogOut = authorizationService.logOut(httpServletResponse);
+
+        if (couldLogOut) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
     }
 }

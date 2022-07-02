@@ -1,10 +1,11 @@
 package com.company.foodapp.controllers;
 
 import com.company.foodapp.core.PropertiesFileReader;
-import com.company.foodapp.models.AuthenticationDetails;
 import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
+import com.company.foodapp.models.AuthenticationDetails;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
+import com.company.foodapp.services.AuthorizationService;
 import com.company.foodapp.services.EmailService;
 import com.company.foodapp.utils.CookieUtils;
 import com.company.foodapp.utils.JwtUtils;
@@ -31,6 +32,7 @@ public class AuthorizationControllerTest {
     private AuthorizationController authorizationController;
     private EmailService emailService;
     private StringUtils stringUtils;
+    private AuthorizationService authorizationService;
 
     public AuthorizationControllerTest() {
         jwtUtils = mock(JwtUtils.class);
@@ -41,7 +43,8 @@ public class AuthorizationControllerTest {
         logger = mock(Logger.class);
         emailService = mock(EmailService.class);
         stringUtils = mock(StringUtils.class);
-        authorizationController = new AuthorizationController(jwtUtils, cookieUtils, claimsToAuthenticationDetailsMapper, userRepository, propertiesFileReader, logger, emailService, stringUtils);
+        authorizationService = mock(AuthorizationService.class);
+        authorizationController = new AuthorizationController(jwtUtils, cookieUtils, claimsToAuthenticationDetailsMapper, userRepository, propertiesFileReader, logger, emailService, stringUtils, authorizationService);
     }
 
     @Test
