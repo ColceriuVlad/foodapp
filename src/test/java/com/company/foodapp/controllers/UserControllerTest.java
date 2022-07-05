@@ -3,6 +3,7 @@ package com.company.foodapp.controllers;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
 import com.company.foodapp.services.AuthorizationService;
+import com.company.foodapp.services.CartService;
 import com.company.foodapp.services.EmailService;
 import com.company.foodapp.utils.CookieUtils;
 import com.company.foodapp.utils.JwtUtils;
@@ -30,6 +31,7 @@ public class UserControllerTest {
     private CookieUtils cookieUtils;
     private JwtUtils jwtUtils;
     private AuthorizationService authorizationService;
+    private CartService cartService;
 
     public UserControllerTest() {
         userRepository = mock(UserRepository.class);
@@ -40,7 +42,8 @@ public class UserControllerTest {
         cookieUtils = mock(CookieUtils.class);
         jwtUtils = mock(JwtUtils.class);
         authorizationService = mock(AuthorizationService.class);
-        userController = new UserController(userRepository, logger, userValidator, stringUtils, emailService, cookieUtils, jwtUtils, authorizationService);
+        cartService = mock(CartService.class);
+        userController = new UserController(userRepository, logger, userValidator, stringUtils, emailService, cookieUtils, jwtUtils, authorizationService, cartService);
     }
 
     @Test

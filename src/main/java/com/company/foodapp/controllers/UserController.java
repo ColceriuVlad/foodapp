@@ -7,6 +7,7 @@ import com.company.foodapp.models.User;
 import com.company.foodapp.models.UserPasswordHolder;
 import com.company.foodapp.repositories.UserRepository;
 import com.company.foodapp.services.AuthorizationService;
+import com.company.foodapp.services.CartService;
 import com.company.foodapp.services.EmailService;
 import com.company.foodapp.utils.CookieUtils;
 import com.company.foodapp.utils.JwtUtils;
@@ -36,9 +37,10 @@ public class UserController {
     private CookieUtils cookieUtils;
     private JwtUtils jwtUtils;
     private AuthorizationService authorizationService;
+    private CartService cartService;
 
     @Autowired
-    public UserController(UserRepository userRepository, Logger logger, UserValidator userValidator, StringUtils stringUtils, EmailService emailService, CookieUtils cookieUtils, JwtUtils jwtUtils, AuthorizationService authorizationService) {
+    public UserController(UserRepository userRepository, Logger logger, UserValidator userValidator, StringUtils stringUtils, EmailService emailService, CookieUtils cookieUtils, JwtUtils jwtUtils, AuthorizationService authorizationService, CartService cartService) {
         this.userRepository = userRepository;
         this.logger = logger;
         this.userValidator = userValidator;
@@ -47,24 +49,21 @@ public class UserController {
         this.cookieUtils = cookieUtils;
         this.jwtUtils = jwtUtils;
         this.authorizationService = authorizationService;
+        this.cartService = cartService;
     }
 
     @GetMapping
     @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
     public ResponseEntity<List<User>> getAllUsers() {
-        ResponseEntity<List<User>> response;
-
         var users = userRepository.findAll();
 
         if (!users.isEmpty()) {
             logger.info("Successfully retrieved users");
-            response = new ResponseEntity<>(users, HttpStatus.OK);
+            return new ResponseEntity<>(users, HttpStatus.OK);
         } else {
             logger.info("Could not retrieve users");
-            response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        return response;
     }
 
     @GetMapping("{id}")
@@ -121,16 +120,22 @@ public class UserController {
 
     @PutMapping("validation/{validationCode}")
     public ResponseEntity validateUser(@PathVariable String validationCode) {
-        User user = null;
-
         try {
-            user = userRepository.findByValidationCode(validationCode).get();
+            var user = userRepository.findByValidationCode(validationCode).get();
             logger.info("Successfully found user with validation code" + validationCode);
             user.validationCode = null;
             user.activated = true;
             userRepository.save(user);
 
-            return new ResponseEntity(HttpStatus.OK);
+            var couldAddCartToUser = cartService.addCartToUser(user);
+
+            if (couldAddCartToUser == true) {
+                logger.info("Successfully added cart to user after validation was performed for user " + user.username);
+                return new ResponseEntity(HttpStatus.OK);
+            } else {
+                logger.info("Could not add cart to user after validation was performed for user " + user.username);
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
         } catch (Exception exception) {
             var errorMessage = "Could not find user with validation code " + validationCode;
             logger.info(errorMessage);
