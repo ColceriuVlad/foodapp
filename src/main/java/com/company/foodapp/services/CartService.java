@@ -24,7 +24,7 @@ public class CartService {
             cart.user = user;
             cartRepository.save(cart);
 
-            logger.info("Cart was successfully added tou user " + user.username);
+            logger.info("Cart was successfully added to user " + user.username);
             return true;
         } catch (Exception exception) {
             logger.info("Could not add cart to user " + user.username);

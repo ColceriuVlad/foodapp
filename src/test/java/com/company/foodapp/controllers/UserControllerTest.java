@@ -6,6 +6,7 @@ import com.company.foodapp.services.AuthorizationService;
 import com.company.foodapp.services.CartService;
 import com.company.foodapp.services.EmailService;
 import com.company.foodapp.utils.CookieUtils;
+import com.company.foodapp.utils.DateUtils;
 import com.company.foodapp.utils.JwtUtils;
 import com.company.foodapp.utils.StringUtils;
 import com.company.foodapp.validators.UserValidator;
@@ -24,7 +25,6 @@ import static org.mockito.Mockito.when;
 public class UserControllerTest {
     private UserRepository userRepository;
     private Logger logger;
-    private UserController userController;
     private UserValidator userValidator;
     private StringUtils stringUtils;
     private EmailService emailService;
@@ -32,6 +32,8 @@ public class UserControllerTest {
     private JwtUtils jwtUtils;
     private AuthorizationService authorizationService;
     private CartService cartService;
+    private DateUtils dateUtils;
+    private UserController userController;
 
     public UserControllerTest() {
         userRepository = mock(UserRepository.class);
@@ -43,7 +45,8 @@ public class UserControllerTest {
         jwtUtils = mock(JwtUtils.class);
         authorizationService = mock(AuthorizationService.class);
         cartService = mock(CartService.class);
-        userController = new UserController(userRepository, logger, userValidator, stringUtils, emailService, cookieUtils, jwtUtils, authorizationService, cartService);
+        dateUtils = mock(DateUtils.class);
+        userController = new UserController(userRepository, logger, userValidator, stringUtils, emailService, cookieUtils, jwtUtils, authorizationService, cartService, dateUtils);
     }
 
     @Test

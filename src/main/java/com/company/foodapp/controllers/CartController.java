@@ -2,19 +2,21 @@ package com.company.foodapp.controllers;
 
 import com.company.foodapp.handlers.AuthHandler;
 import com.company.foodapp.models.Cart;
+import com.company.foodapp.models.ErrorResponse;
 import com.company.foodapp.repositories.CartRepository;
+import com.company.foodapp.services.AuthorizationService;
 import com.company.foodapp.services.CartService;
+import com.company.foodapp.services.FoodService;
+import com.company.foodapp.utils.DateUtils;
 import com.kastkode.springsandwich.filter.annotation.Before;
 import com.kastkode.springsandwich.filter.annotation.BeforeElement;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RequestMapping("cart")
@@ -23,12 +25,18 @@ public class CartController {
     private CartRepository cartRepository;
     private CartService cartService;
     private Logger logger;
+    private AuthorizationService authorizationService;
+    private DateUtils dateUtils;
+    private FoodService foodService;
 
     @Autowired
-    public CartController(CartRepository cartRepository, CartService cartService, Logger logger) {
+    public CartController(CartRepository cartRepository, CartService cartService, Logger logger, AuthorizationService authorizationService, DateUtils dateUtils, FoodService foodService) {
         this.cartRepository = cartRepository;
         this.cartService = cartService;
         this.logger = logger;
+        this.authorizationService = authorizationService;
+        this.dateUtils = dateUtils;
+        this.foodService = foodService;
     }
 
     @GetMapping
@@ -56,6 +64,74 @@ public class CartController {
         } else {
             logger.info("Could not retrieve the cart of user " + username);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @PutMapping("{supplierName}/{foodName}")
+    public ResponseEntity addFoodToCart(@PathVariable String supplierName, @PathVariable String foodName, HttpServletRequest httpServletRequest) {
+        var currentAuthenticationDetails = authorizationService.getCurrentAuthenticationDetails(httpServletRequest);
+
+        if (currentAuthenticationDetails != null) {
+            var food = foodService.getFoodFromSupplier(supplierName, foodName);
+
+            if (food != null) {
+                logger.info("Successfully retrieved current user");
+                var currentUserName = currentAuthenticationDetails.subject;
+
+                var cart = cartService.getCartByUserName(currentUserName);
+
+                if (cart != null) {
+                    logger.info("Successfully retrieved the cart of the current user");
+
+                    var foodListFromCart = cart.foodList;
+
+                    if (!foodListFromCart.isEmpty()) {
+                        var firstFoodFromCart = cart.foodList.get(0);
+                        var firstFoodFromCartSupplier = firstFoodFromCart.supplier;
+                        var firstFoodFromCartSupplierName = firstFoodFromCartSupplier.name;
+
+                        if (firstFoodFromCartSupplierName.equals(food.supplier.name)) {
+                            cart.foodList.add(food);
+                            cartRepository.save(cart);
+                            logger.info("Successfully added food: " + food.name + " from supplier " + food.supplier + "to user " + currentUserName);
+
+                            return new ResponseEntity(HttpStatus.OK);
+                        } else {
+                            var errorMessage = "Cannot add food to cart from a different supplier";
+                            logger.info(errorMessage);
+
+                            var errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), errorMessage, dateUtils.getCurrentDate());
+                            return new ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED);
+                        }
+                    } else {
+                        cart.foodList.add(food);
+                        cartRepository.save(cart);
+                        logger.info("Successfully added food: " + food.name + " from supplier " + food.supplier + "to user " + currentUserName);
+                        return new ResponseEntity(HttpStatus.OK);
+                    }
+                } else {
+                    var errorMessage = "Could not retrieve the cart of the current user";
+                    logger.info(errorMessage);
+
+                    var errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorMessage, dateUtils.getCurrentDate());
+                    return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
+                }
+            } else {
+                var errorMessage = String.format("Could not find food %s from supplier %s", foodName, supplierName);
+                var errorResponse = new ErrorResponse(
+                        HttpStatus.NOT_FOUND.value(),
+                        errorMessage,
+                        dateUtils.getCurrentDate());
+
+                return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
+            }
+        } else {
+            var errorMessage = "User is not logged in, cannot add food to cart";
+            logger.info(errorMessage);
+
+            var errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), errorMessage, dateUtils.getCurrentDate());
+            return new ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED);
         }
     }
 }

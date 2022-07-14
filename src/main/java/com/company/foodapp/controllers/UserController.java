@@ -10,6 +10,7 @@ import com.company.foodapp.services.AuthorizationService;
 import com.company.foodapp.services.CartService;
 import com.company.foodapp.services.EmailService;
 import com.company.foodapp.utils.CookieUtils;
+import com.company.foodapp.utils.DateUtils;
 import com.company.foodapp.utils.JwtUtils;
 import com.company.foodapp.utils.StringUtils;
 import com.company.foodapp.validators.UserValidator;
@@ -38,9 +39,10 @@ public class UserController {
     private JwtUtils jwtUtils;
     private AuthorizationService authorizationService;
     private CartService cartService;
+    private DateUtils dateUtils;
 
     @Autowired
-    public UserController(UserRepository userRepository, Logger logger, UserValidator userValidator, StringUtils stringUtils, EmailService emailService, CookieUtils cookieUtils, JwtUtils jwtUtils, AuthorizationService authorizationService, CartService cartService) {
+    public UserController(UserRepository userRepository, Logger logger, UserValidator userValidator, StringUtils stringUtils, EmailService emailService, CookieUtils cookieUtils, JwtUtils jwtUtils, AuthorizationService authorizationService, CartService cartService, DateUtils dateUtils) {
         this.userRepository = userRepository;
         this.logger = logger;
         this.userValidator = userValidator;
@@ -50,6 +52,7 @@ public class UserController {
         this.jwtUtils = jwtUtils;
         this.authorizationService = authorizationService;
         this.cartService = cartService;
+        this.dateUtils = dateUtils;
     }
 
     @GetMapping
@@ -106,14 +109,20 @@ public class UserController {
                 var errorMessage = "Could not send validation email to user " + email.to;
                 logger.info(errorMessage);
 
-                var errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage);
+                var errorResponse = new ErrorResponse(
+                        HttpStatus.BAD_REQUEST.value(),
+                        errorMessage,
+                        dateUtils.getCurrentDate());
                 return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
             }
         } else {
             var errorMessage = "User was not validated";
             logger.info(errorMessage);
 
-            var errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage);
+            var errorResponse = new ErrorResponse(
+                    HttpStatus.BAD_REQUEST.value(),
+                    errorMessage, dateUtils.
+                    getCurrentDate());
             return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
@@ -140,7 +149,10 @@ public class UserController {
             var errorMessage = "Could not find user with validation code " + validationCode;
             logger.info(errorMessage);
 
-            var errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorMessage);
+            var errorResponse = new ErrorResponse(
+                    HttpStatus.NOT_FOUND.value(),
+                    errorMessage,
+                    dateUtils.getCurrentDate());
             return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
         }
     }

@@ -8,6 +8,7 @@ import com.company.foodapp.repositories.UserRepository;
 import com.company.foodapp.services.AuthorizationService;
 import com.company.foodapp.services.EmailService;
 import com.company.foodapp.utils.CookieUtils;
+import com.company.foodapp.utils.DateUtils;
 import com.company.foodapp.utils.JwtUtils;
 import com.company.foodapp.utils.StringUtils;
 import org.junit.jupiter.api.Assertions;
@@ -29,10 +30,11 @@ public class AuthorizationControllerTest {
     private UserRepository userRepository;
     private PropertiesFileReader propertiesFileReader;
     private Logger logger;
-    private AuthorizationController authorizationController;
     private EmailService emailService;
     private StringUtils stringUtils;
     private AuthorizationService authorizationService;
+    private DateUtils dateUtils;
+    private AuthorizationController authorizationController;
 
     public AuthorizationControllerTest() {
         jwtUtils = mock(JwtUtils.class);
@@ -44,7 +46,8 @@ public class AuthorizationControllerTest {
         emailService = mock(EmailService.class);
         stringUtils = mock(StringUtils.class);
         authorizationService = mock(AuthorizationService.class);
-        authorizationController = new AuthorizationController(jwtUtils, cookieUtils, claimsToAuthenticationDetailsMapper, userRepository, propertiesFileReader, logger, emailService, stringUtils, authorizationService);
+        dateUtils = mock(DateUtils.class);
+        authorizationController = new AuthorizationController(jwtUtils, cookieUtils, claimsToAuthenticationDetailsMapper, userRepository, propertiesFileReader, logger, emailService, stringUtils, authorizationService, dateUtils);
     }
 
     @Test

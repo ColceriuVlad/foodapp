@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+import java.text.SimpleDateFormat;
+
 @Configuration
 public class DependenciesConfiguration {
     @Bean
@@ -29,5 +31,11 @@ public class DependenciesConfiguration {
     @Scope("prototype")
     public JwtParser jwtParser() {
         return Jwts.parser();
+    }
+
+    @Bean
+    @Scope("singleton")
+    public SimpleDateFormat simpleDateFormat(){
+        return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }
 }

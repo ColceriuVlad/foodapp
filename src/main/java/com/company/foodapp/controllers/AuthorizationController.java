@@ -1,20 +1,15 @@
 package com.company.foodapp.controllers;
 
 import com.company.foodapp.core.PropertiesFileReader;
-import com.company.foodapp.handlers.AuthHandler;
 import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
-import com.company.foodapp.models.AuthenticationDetails;
-import com.company.foodapp.models.Email;
-import com.company.foodapp.models.ForgotPasswordDetails;
-import com.company.foodapp.models.User;
+import com.company.foodapp.models.*;
 import com.company.foodapp.repositories.UserRepository;
 import com.company.foodapp.services.AuthorizationService;
 import com.company.foodapp.services.EmailService;
 import com.company.foodapp.utils.CookieUtils;
+import com.company.foodapp.utils.DateUtils;
 import com.company.foodapp.utils.JwtUtils;
 import com.company.foodapp.utils.StringUtils;
-import com.kastkode.springsandwich.filter.annotation.Before;
-import com.kastkode.springsandwich.filter.annotation.BeforeElement;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,9 +31,10 @@ public class AuthorizationController {
     private EmailService emailService;
     private StringUtils stringUtils;
     private AuthorizationService authorizationService;
+    private DateUtils dateUtils;
 
     @Autowired
-    public AuthorizationController(JwtUtils jwtUtils, CookieUtils cookieUtils, ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper, UserRepository userRepository, PropertiesFileReader propertiesFileReader, Logger logger, EmailService emailService, StringUtils stringUtils, AuthorizationService authorizationService) {
+    public AuthorizationController(JwtUtils jwtUtils, CookieUtils cookieUtils, ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper, UserRepository userRepository, PropertiesFileReader propertiesFileReader, Logger logger, EmailService emailService, StringUtils stringUtils, AuthorizationService authorizationService, DateUtils dateUtils) {
         this.jwtUtils = jwtUtils;
         this.cookieUtils = cookieUtils;
         this.claimsToAuthenticationDetailsMapper = claimsToAuthenticationDetailsMapper;
@@ -48,6 +44,7 @@ public class AuthorizationController {
         this.emailService = emailService;
         this.stringUtils = stringUtils;
         this.authorizationService = authorizationService;
+        this.dateUtils = dateUtils;
     }
 
     @PostMapping("/login")
@@ -78,16 +75,20 @@ public class AuthorizationController {
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 
-
     @GetMapping("/getCurrentAuthenticationDetails")
-    @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
-    public AuthenticationDetails getCurrentAuthenticationDetails(HttpServletRequest httpServletRequest) {
-        var authenticationToken = cookieUtils.getCookieValue("token", httpServletRequest);
+    public ResponseEntity getCurrentAuthenticationDetails(HttpServletRequest httpServletRequest) {
+        var authenticationDetails = authorizationService.getCurrentAuthenticationDetails(httpServletRequest);
 
-        var claims = jwtUtils.decodeJWT(authenticationToken);
-        var authenticationDetails = claimsToAuthenticationDetailsMapper.map(claims);
+        if (authenticationDetails != null) {
+            return new ResponseEntity(authenticationDetails, HttpStatus.OK);
+        } else {
+            var errorResponse = new ErrorResponse(
+                    HttpStatus.UNAUTHORIZED.value(),
+                    "Could not get current authentication details",
+                    dateUtils.getCurrentDate());
 
-        return authenticationDetails;
+            return new ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @PostMapping("/resetPassword")

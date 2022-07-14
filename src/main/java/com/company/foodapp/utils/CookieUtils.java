@@ -53,18 +53,20 @@ public class CookieUtils {
 
     public String getCookieValue(String cookieName, HttpServletRequest httpServletRequest) {
         var cookies = httpServletRequest.getCookies();
-        String cookieValue = null;
 
-        if (cookies.length != 0) {
+        if (cookies != null) {
             for (var cookie : cookies) {
                 if (cookie.getName().equals(cookieName)) {
-                    cookieValue = cookie.getValue();
+                    logger.info("Successfully retrieved cookie '" + cookieName + "'");
+                    return cookie.getValue();
                 }
             }
-        } else {
-            logger.info("Could not retrieve cookie value, cookie was not found");
-        }
 
-        return cookieValue;
+            logger.info("Cookie " + cookieName + " was not found");
+            return null;
+        } else {
+            logger.info("There are no existing cookies");
+            return null;
+        }
     }
 }

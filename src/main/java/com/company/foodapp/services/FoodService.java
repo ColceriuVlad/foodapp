@@ -47,22 +47,18 @@ public class FoodService {
 
     public Food getFoodFromSupplier(String supplierName, String foodName) {
         var foodList = getAllFoodsBySupplierName(supplierName);
-        Food actualFood = null;
 
         if (!foodList.isEmpty()) {
             for (var food : foodList) {
                 if (food.name.equals(foodName)) {
-                    actualFood = food;
+                    logger.info("Successfully retrieved food of type " + foodName + " from supplier " + supplierName);
+                    return food;
                 }
             }
-        }
-
-        if (actualFood != null) {
-            logger.info("Successfully retrieved food of type " + foodName + " from supplier " + supplierName);
+            logger.info("Could not retrieve food " + foodName + " from supplier " + supplierName);
+            return null;
         } else {
-            logger.info("Could not retrieve food of type " + foodName + " from supplier " + supplierName);
+            return null;
         }
-
-        return actualFood;
     }
 }
