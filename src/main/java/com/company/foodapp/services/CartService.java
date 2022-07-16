@@ -1,6 +1,7 @@
 package com.company.foodapp.services;
 
 import com.company.foodapp.models.Cart;
+import com.company.foodapp.models.Food;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.CartRepository;
 import org.slf4j.Logger;
@@ -35,7 +36,7 @@ public class CartService {
     public Cart getCartByUserName(String username) {
         var carts = cartRepository.findAll();
 
-        if(!carts.isEmpty()) {
+        if (!carts.isEmpty()) {
             for (var cart : carts) {
                 if (cart.user.username.equals(username)) {
                     logger.info("Successfully retrieved cart for user " + username);
@@ -47,6 +48,26 @@ public class CartService {
             return null;
         } else {
             logger.info("Could not retrieve any carts from the application");
+            return null;
+        }
+    }
+
+    public Cart getCartWithDeletedFood(Cart cart, String foodName) {
+        var foodList = cart.foodList;
+
+        if (foodList != null) {
+            for (var i = 0; i < cart.foodList.size(); i++) {
+                if (foodList.get(i).name.equals(foodName)) {
+                    cart.foodList.remove(i);
+                    logger.info("Successfully removed food " + foodName + "from cart");
+
+                    return cart;
+                }
+            }
+            logger.info("Food " + foodName + "was not found in the current cart");
+            return null;
+        } else {
+            logger.info("There is no food added in the current cart");
             return null;
         }
     }

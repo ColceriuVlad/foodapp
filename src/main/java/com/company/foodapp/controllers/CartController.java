@@ -77,9 +77,9 @@ public class CartController {
 
             if (food != null) {
                 logger.info("Successfully retrieved current user");
-                var currentUserName = currentAuthenticationDetails.subject;
+                var currentUsername = currentAuthenticationDetails.subject;
 
-                var cart = cartService.getCartByUserName(currentUserName);
+                var cart = cartService.getCartByUserName(currentUsername);
 
                 if (cart != null) {
                     logger.info("Successfully retrieved the cart of the current user");
@@ -94,7 +94,7 @@ public class CartController {
                         if (firstFoodFromCartSupplierName.equals(food.supplier.name)) {
                             cart.foodList.add(food);
                             cartRepository.save(cart);
-                            logger.info("Successfully added food: " + food.name + " from supplier " + food.supplier + "to user " + currentUserName);
+                            logger.info("Successfully added food: " + food.name + " from supplier " + food.supplier + "to user " + currentUsername);
 
                             return new ResponseEntity(HttpStatus.OK);
                         } else {
@@ -107,7 +107,7 @@ public class CartController {
                     } else {
                         cart.foodList.add(food);
                         cartRepository.save(cart);
-                        logger.info("Successfully added food: " + food.name + " from supplier " + food.supplier + "to user " + currentUserName);
+                        logger.info("Successfully added food: " + food.name + " from supplier " + food.supplier + "to user " + currentUsername);
                         return new ResponseEntity(HttpStatus.OK);
                     }
                 } else {
@@ -131,6 +131,49 @@ public class CartController {
             logger.info(errorMessage);
 
             var errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), errorMessage, dateUtils.getCurrentDate());
+            return new ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @DeleteMapping("{foodName}")
+    public ResponseEntity deleteFoodFromCart(@PathVariable String foodName, HttpServletRequest httpServletRequest) {
+        var currentAuthenticationDetails = authorizationService.getCurrentAuthenticationDetails(httpServletRequest);
+
+        if (currentAuthenticationDetails != null) {
+            var currentUsername = currentAuthenticationDetails.subject;
+            var cart = cartService.getCartByUserName(currentUsername);
+
+            if (cart != null) {
+                var cartWithDeletedFood = cartService.getCartWithDeletedFood(cart, foodName);
+
+                if (cartWithDeletedFood != null) {
+                    cartRepository.save(cartWithDeletedFood);
+
+                    logger.info("Successfully deleted food " + foodName + " from cart");
+
+                    return new ResponseEntity(HttpStatus.OK);
+                } else {
+                    var errorMessage = "Could not delete food " + foodName + " from cart";
+                    logger.info(errorMessage);
+
+                    var errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage, dateUtils.getCurrentDate());
+
+                    return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
+                }
+            } else {
+                var errorMessage = "Could not find the cart of the current user";
+                logger.info(errorMessage);
+
+                var errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorMessage, dateUtils.getCurrentDate());
+
+                return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
+            }
+        } else {
+            var errorMessage = "User is not logged in, cannot remove food from cart";
+            logger.info(errorMessage);
+
+            var errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), errorMessage, dateUtils.getCurrentDate());
+
             return new ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED);
         }
     }

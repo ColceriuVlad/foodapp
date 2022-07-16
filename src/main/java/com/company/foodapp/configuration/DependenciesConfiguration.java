@@ -1,5 +1,7 @@
 package com.company.foodapp.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -35,7 +37,15 @@ public class DependenciesConfiguration {
 
     @Bean
     @Scope("singleton")
-    public SimpleDateFormat simpleDateFormat(){
+    public SimpleDateFormat simpleDateFormat() {
         return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    }
+
+    @Bean
+    @Scope("singleton")
+    public ObjectMapper objectMapper() {
+        var objectMapper = new ObjectMapper();
+        var objectMapperWithPrettier = objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        return objectMapperWithPrettier;
     }
 }
