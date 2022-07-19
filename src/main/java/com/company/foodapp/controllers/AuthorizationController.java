@@ -1,6 +1,5 @@
 package com.company.foodapp.controllers;
 
-import com.company.foodapp.core.PropertiesFileReader;
 import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
 import com.company.foodapp.models.*;
 import com.company.foodapp.repositories.UserRepository;
@@ -12,6 +11,7 @@ import com.company.foodapp.utils.JwtUtils;
 import com.company.foodapp.utils.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ public class AuthorizationController {
     private CookieUtils cookieUtils;
     private ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper;
     private UserRepository userRepository;
-    private PropertiesFileReader propertiesFileReader;
+    private Environment environment;
     private Logger logger;
     private EmailService emailService;
     private StringUtils stringUtils;
@@ -34,12 +34,12 @@ public class AuthorizationController {
     private DateUtils dateUtils;
 
     @Autowired
-    public AuthorizationController(JwtUtils jwtUtils, CookieUtils cookieUtils, ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper, UserRepository userRepository, PropertiesFileReader propertiesFileReader, Logger logger, EmailService emailService, StringUtils stringUtils, AuthorizationService authorizationService, DateUtils dateUtils) {
+    public AuthorizationController(JwtUtils jwtUtils, CookieUtils cookieUtils, ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper, UserRepository userRepository, Environment environment, Logger logger, EmailService emailService, StringUtils stringUtils, AuthorizationService authorizationService, DateUtils dateUtils) {
         this.jwtUtils = jwtUtils;
         this.cookieUtils = cookieUtils;
         this.claimsToAuthenticationDetailsMapper = claimsToAuthenticationDetailsMapper;
         this.userRepository = userRepository;
-        this.propertiesFileReader = propertiesFileReader;
+        this.environment = environment;
         this.logger = logger;
         this.emailService = emailService;
         this.stringUtils = stringUtils;
@@ -62,7 +62,7 @@ public class AuthorizationController {
                         userFromDb.username,
                         userFromDb.role,
                         userFromDb.email,
-                        Long.parseLong(propertiesFileReader.getProperty("JWT_AUTHENTICATION_TOKEN_DURATION")));
+                        Long.parseLong(environment.getProperty("JWT_AUTHENTICATION_TOKEN_DURATION")));
 
                 var jwtToken = jwtUtils.createJWT(authenticationDetails);
                 logger.info("User has logged in successfully");
@@ -111,7 +111,7 @@ public class AuthorizationController {
                 var forgotPasswordDetails = new ForgotPasswordDetails(
                         user.username,
                         user.email,
-                        Long.parseLong(propertiesFileReader.getProperty("JWT_FORGOT_PASSWORD_TOKEN_DURATION")),
+                        Long.parseLong(environment.getProperty("JWT_FORGOT_PASSWORD_TOKEN_DURATION")),
                         validationCode,
                         userFromDb.id);
 

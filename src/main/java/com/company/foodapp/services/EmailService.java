@@ -1,9 +1,9 @@
 package com.company.foodapp.services;
 
-import com.company.foodapp.core.PropertiesFileReader;
 import com.company.foodapp.models.Email;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -13,25 +13,25 @@ import java.util.Properties;
 
 @Service
 public class EmailService {
-    private PropertiesFileReader propertiesFileReader;
+    private Environment environment;
     private Properties properties;
     private Session session;
     private Logger logger;
 
     @Autowired
-    public EmailService(PropertiesFileReader propertiesFileReader, Logger logger) {
-        this.propertiesFileReader = propertiesFileReader;
+    public EmailService(Environment environment, Logger logger) {
+        this.environment = environment;
         properties = getProperties();
         session = getSession();
         this.logger = logger;
     }
 
     private Properties getProperties() {
-        var properties = System.getProperties();
-        properties.put("mail.smtp.host", propertiesFileReader.getProperty("GMAIL_HOST"));
-        properties.put("mail.smtp.port", propertiesFileReader.getProperty("GMAIL_PORT"));
-        properties.put("mail.smtp.ssl.enable", propertiesFileReader.getProperty("GMAIL_SSL"));
-        properties.put("mail.smtp.auth", propertiesFileReader.getProperty("GMAIL_AUTH"));
+        var properties = new Properties();
+        properties.put("mail.smtp.host", environment.getProperty("GMAIL_HOST"));
+        properties.put("mail.smtp.port", environment.getProperty("GMAIL_PORT"));
+        properties.put("mail.smtp.ssl.enable", environment.getProperty("GMAIL_SSL"));
+        properties.put("mail.smtp.auth", environment.getProperty("GMAIL_AUTH"));
         return properties;
     }
 
@@ -39,8 +39,8 @@ public class EmailService {
         var session = Session.getInstance(properties, new javax.mail.Authenticator() {
 
             protected PasswordAuthentication getPasswordAuthentication() {
-                var from = propertiesFileReader.getProperty("GMAIL_FROM");
-                var password = propertiesFileReader.getProperty("GMAIL_PASSWORD");
+                var from = environment.getProperty("GMAIL_FROM");
+                var password = environment.getProperty("GMAIL_PASSWORD");
                 return new PasswordAuthentication(from, password);
             }
         });
@@ -52,7 +52,7 @@ public class EmailService {
         var mimeMessage = new MimeMessage(session);
 
         try {
-            var from = propertiesFileReader.getProperty("GMAIL_FROM");
+            var from = environment.getProperty("GMAIL_FROM");
             var fromInternetAddress = new InternetAddress(from);
             mimeMessage.setFrom(fromInternetAddress);
 
@@ -64,7 +64,7 @@ public class EmailService {
             mimeMessage.setText(email.text);
 
             Transport.send(mimeMessage);
-            logger.info("Email was sent to " + propertiesFileReader.getProperty("GMAIL_FROM"));
+            logger.info("Email was sent to " + environment.getProperty("GMAIL_FROM"));
             return true;
         } catch (MessagingException messagingException) {
             logger.info("Email could not be sent");

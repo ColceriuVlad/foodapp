@@ -1,6 +1,5 @@
 package com.company.foodapp.controllers;
 
-import com.company.foodapp.core.PropertiesFileReader;
 import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
 import com.company.foodapp.models.AuthenticationDetails;
 import com.company.foodapp.models.User;
@@ -14,6 +13,7 @@ import com.company.foodapp.utils.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +28,7 @@ public class AuthorizationControllerTest {
     private CookieUtils cookieUtils;
     private ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper;
     private UserRepository userRepository;
-    private PropertiesFileReader propertiesFileReader;
+    private Environment environment;
     private Logger logger;
     private EmailService emailService;
     private StringUtils stringUtils;
@@ -41,13 +41,13 @@ public class AuthorizationControllerTest {
         cookieUtils = mock(CookieUtils.class);
         claimsToAuthenticationDetailsMapper = mock(ClaimsToAuthenticationDetailsMapper.class);
         userRepository = mock(UserRepository.class);
-        propertiesFileReader = mock(PropertiesFileReader.class);
+        environment = mock(Environment.class);
         logger = mock(Logger.class);
         emailService = mock(EmailService.class);
         stringUtils = mock(StringUtils.class);
         authorizationService = mock(AuthorizationService.class);
         dateUtils = mock(DateUtils.class);
-        authorizationController = new AuthorizationController(jwtUtils, cookieUtils, claimsToAuthenticationDetailsMapper, userRepository, propertiesFileReader, logger, emailService, stringUtils, authorizationService, dateUtils);
+        authorizationController = new AuthorizationController(jwtUtils, cookieUtils, claimsToAuthenticationDetailsMapper, userRepository, environment, logger, emailService, stringUtils, authorizationService, dateUtils);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class AuthorizationControllerTest {
 
         var expectedToken = "qwerqwerqweofijqwefoij";
 
-        when(propertiesFileReader.getProperty("JWT_AUTHENTICATION_TOKEN_DURATION")).thenReturn("1000");
+        when(environment.getProperty("JWT_AUTHENTICATION_TOKEN_DURATION")).thenReturn("1000");
         when(userRepository.findAll()).thenReturn(usersFromDB);
         when(jwtUtils.createJWT(any(AuthenticationDetails.class))).thenReturn(expectedToken);
 

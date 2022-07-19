@@ -1,6 +1,5 @@
 package com.company.foodapp.utils;
 
-import com.company.foodapp.core.PropertiesFileReader;
 import com.company.foodapp.models.AuthenticationDetails;
 import com.company.foodapp.models.ForgotPasswordDetails;
 import io.jsonwebtoken.Claims;
@@ -9,6 +8,7 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -18,14 +18,14 @@ import java.util.Date;
 
 @Component
 public class JwtUtils {
-    private PropertiesFileReader propertiesFileReader;
+    private Environment environment;
     private JwtBuilder jwtBuilder;
     private JwtParser jwtParser;
     private Logger logger;
 
     @Autowired
-    public JwtUtils(PropertiesFileReader propertiesFileReader, JwtBuilder jwtBuilder, JwtParser jwtParser, Logger logger) {
-        this.propertiesFileReader = propertiesFileReader;
+    public JwtUtils(Environment environment, JwtBuilder jwtBuilder, JwtParser jwtParser, Logger logger) {
+        this.environment = environment;
         this.jwtBuilder = jwtBuilder;
         this.jwtParser = jwtParser;
         this.logger = logger;
@@ -39,7 +39,7 @@ public class JwtUtils {
         Date now = new Date(nowMillis);
 
         //We will sign our JWT with our ApiKey secret
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(propertiesFileReader.getProperty("JWT_SECRET"));
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(environment.getProperty("JWT_SECRET"));
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         //Let's set the JWT Claims
@@ -68,7 +68,7 @@ public class JwtUtils {
         Date now = new Date(nowMillis);
 
         //We will sign our JWT with our ApiKey secret
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(propertiesFileReader.getProperty("JWT_SECRET"));
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(environment.getProperty("JWT_SECRET"));
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         //Let's set the JWT Claims
@@ -92,7 +92,7 @@ public class JwtUtils {
 
     public Claims decodeJWT(String jwt) {
         try {
-            var jwtSecret = propertiesFileReader.getProperty("JWT_SECRET");
+            var jwtSecret = environment.getProperty("JWT_SECRET");
             var convertedJwtSecret = DatatypeConverter.parseBase64Binary(jwtSecret);
             var parserWithSigningKey = jwtParser.setSigningKey(convertedJwtSecret);
             var parsedClaims = parserWithSigningKey.parseClaimsJws(jwt);
