@@ -177,4 +177,51 @@ public class CartController {
             return new ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @DeleteMapping
+    public ResponseEntity deleteFoodListFromCart(HttpServletRequest httpServletRequest) {
+        var authenticationDetails = authorizationService.getCurrentAuthenticationDetails(httpServletRequest);
+
+        if (authenticationDetails != null) {
+            logger.info("Successfully retrieved authentication details");
+
+            var currentUsername = authenticationDetails.subject;
+            var cart = cartService.getCartByUserName(currentUsername);
+
+            if (cart != null) {
+                logger.info("Successfully retrieved the cart of the current user");
+
+                if (!cart.foodList.isEmpty()) {
+                    logger.info("Successfully found the cart foodlist");
+                    cart.foodList = null;
+                    cartRepository.save(cart);
+                    logger.info("Successfully deleted the foodlist from cart");
+
+                    return new ResponseEntity(HttpStatus.OK);
+                } else {
+                    var errorMessage = "Could not find the cart foodlist";
+                    logger.info(errorMessage);
+
+                    var errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorMessage, dateUtils.getCurrentDate());
+
+                    return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
+                }
+
+            } else {
+                var errorMessage = "Could not retrieve the cart of the current user";
+                logger.info(errorMessage);
+
+                var errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorMessage, dateUtils.getCurrentDate());
+
+                return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
+            }
+        } else {
+            var errorMessage = "Could not retrieve authentication details";
+            logger.info(errorMessage);
+
+            var errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), errorMessage, dateUtils.getCurrentDate());
+
+            return new ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED);
+        }
+    }
 }
