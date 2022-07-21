@@ -1,1 +1,3 @@
 rootProject.name = 'food-app'
+include 'apitests'
+
