@@ -79,16 +79,7 @@ public class AuthorizationController {
     public ResponseEntity getCurrentAuthenticationDetails(HttpServletRequest httpServletRequest) {
         var authenticationDetails = authorizationService.getCurrentAuthenticationDetails(httpServletRequest);
 
-        if (authenticationDetails != null) {
-            return new ResponseEntity(authenticationDetails, HttpStatus.OK);
-        } else {
-            var errorResponse = new ErrorResponse(
-                    HttpStatus.UNAUTHORIZED.value(),
-                    "Could not get current authentication details",
-                    dateUtils.getCurrentDate());
-
-            return new ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED);
-        }
+        return new ResponseEntity(authenticationDetails, HttpStatus.OK);
     }
 
     @PostMapping("/resetPassword")

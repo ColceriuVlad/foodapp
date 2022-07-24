@@ -1,22 +1,29 @@
 package com.company.foodapp.services;
 
+import com.company.foodapp.exceptions.NotAuthorizedException;
 import com.company.foodapp.models.Cart;
-import com.company.foodapp.models.Food;
 import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.CartRepository;
+import com.company.foodapp.utils.DateUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class CartService {
     private CartRepository cartRepository;
     private Logger logger;
+    private AuthorizationService authorizationService;
+    private DateUtils dateUtils;
 
     @Autowired
-    public CartService(CartRepository cartRepository, Logger logger) {
+    public CartService(CartRepository cartRepository, Logger logger, AuthorizationService authorizationService, DateUtils dateUtils) {
         this.cartRepository = cartRepository;
         this.logger = logger;
+        this.authorizationService = authorizationService;
+        this.dateUtils = dateUtils;
     }
 
     public boolean addCartToUser(User user) {
@@ -69,6 +76,33 @@ public class CartService {
         } else {
             logger.info("There is no food added in the current cart");
             return null;
+        }
+    }
+
+    public Boolean deleteFoodListFromCart(HttpServletRequest httpServletRequest) {
+        var authenticationDetails = authorizationService.getCurrentAuthenticationDetails(httpServletRequest);
+
+        logger.info("Successfully retrieved authentication details");
+
+        var currentUsername = authenticationDetails.subject;
+        var cart = this.getCartByUserName(currentUsername);
+
+        if (cart != null) {
+            logger.info("Successfully retrieved the cart of the current user");
+
+            if (!cart.foodList.isEmpty()) {
+                logger.info("Successfully found the cart foodlist");
+                cart.foodList = null;
+                cartRepository.save(cart);
+                logger.info("Successfully deleted the foodlist from cart");
+
+                return true;
+            } else {
+                throw new NullPointerException("Could not find the cart foodlist");
+            }
+
+        } else {
+            throw new NullPointerException("Could not retrieve the cart of the current user");
         }
     }
 }

@@ -72,66 +72,58 @@ public class CartController {
     public ResponseEntity addFoodToCart(@PathVariable String supplierName, @PathVariable String foodName, HttpServletRequest httpServletRequest) {
         var currentAuthenticationDetails = authorizationService.getCurrentAuthenticationDetails(httpServletRequest);
 
-        if (currentAuthenticationDetails != null) {
-            var food = foodService.getFoodFromSupplier(supplierName, foodName);
+        var food = foodService.getFoodFromSupplier(supplierName, foodName);
 
-            if (food != null) {
-                logger.info("Successfully retrieved current user");
-                var currentUsername = currentAuthenticationDetails.subject;
+        if (food != null) {
+            logger.info("Successfully retrieved current user");
+            var currentUsername = currentAuthenticationDetails.subject;
 
-                var cart = cartService.getCartByUserName(currentUsername);
+            var cart = cartService.getCartByUserName(currentUsername);
 
-                if (cart != null) {
-                    logger.info("Successfully retrieved the cart of the current user");
+            if (cart != null) {
+                logger.info("Successfully retrieved the cart of the current user");
 
-                    var foodListFromCart = cart.foodList;
+                var foodListFromCart = cart.foodList;
 
-                    if (!foodListFromCart.isEmpty()) {
-                        var firstFoodFromCart = cart.foodList.get(0);
-                        var firstFoodFromCartSupplier = firstFoodFromCart.supplier;
-                        var firstFoodFromCartSupplierName = firstFoodFromCartSupplier.name;
+                if (!foodListFromCart.isEmpty()) {
+                    var firstFoodFromCart = cart.foodList.get(0);
+                    var firstFoodFromCartSupplier = firstFoodFromCart.supplier;
+                    var firstFoodFromCartSupplierName = firstFoodFromCartSupplier.name;
 
-                        if (firstFoodFromCartSupplierName.equals(food.supplier.name)) {
-                            cart.foodList.add(food);
-                            cartRepository.save(cart);
-                            logger.info("Successfully added food: " + food.name + " from supplier " + food.supplier + "to user " + currentUsername);
-
-                            return new ResponseEntity(HttpStatus.OK);
-                        } else {
-                            var errorMessage = "Cannot add food to cart from a different supplier";
-                            logger.info(errorMessage);
-
-                            var errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), errorMessage, dateUtils.getCurrentDate());
-                            return new ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED);
-                        }
-                    } else {
+                    if (firstFoodFromCartSupplierName.equals(food.supplier.name)) {
                         cart.foodList.add(food);
                         cartRepository.save(cart);
                         logger.info("Successfully added food: " + food.name + " from supplier " + food.supplier + "to user " + currentUsername);
+
                         return new ResponseEntity(HttpStatus.OK);
+                    } else {
+                        var errorMessage = "Cannot add food to cart from a different supplier";
+                        logger.info(errorMessage);
+
+                        var errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), errorMessage, dateUtils.getCurrentDate());
+                        return new ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED);
                     }
                 } else {
-                    var errorMessage = "Could not retrieve the cart of the current user";
-                    logger.info(errorMessage);
-
-                    var errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorMessage, dateUtils.getCurrentDate());
-                    return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
+                    cart.foodList.add(food);
+                    cartRepository.save(cart);
+                    logger.info("Successfully added food: " + food.name + " from supplier " + food.supplier + "to user " + currentUsername);
+                    return new ResponseEntity(HttpStatus.OK);
                 }
             } else {
-                var errorMessage = String.format("Could not find food %s from supplier %s", foodName, supplierName);
-                var errorResponse = new ErrorResponse(
-                        HttpStatus.NOT_FOUND.value(),
-                        errorMessage,
-                        dateUtils.getCurrentDate());
+                var errorMessage = "Could not retrieve the cart of the current user";
+                logger.info(errorMessage);
 
+                var errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorMessage, dateUtils.getCurrentDate());
                 return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
             }
         } else {
-            var errorMessage = "User is not logged in, cannot add food to cart";
-            logger.info(errorMessage);
+            var errorMessage = String.format("Could not find food %s from supplier %s", foodName, supplierName);
+            var errorResponse = new ErrorResponse(
+                    HttpStatus.NOT_FOUND.value(),
+                    errorMessage,
+                    dateUtils.getCurrentDate());
 
-            var errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), errorMessage, dateUtils.getCurrentDate());
-            return new ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -139,89 +131,40 @@ public class CartController {
     public ResponseEntity deleteFoodFromCart(@PathVariable String foodName, HttpServletRequest httpServletRequest) {
         var currentAuthenticationDetails = authorizationService.getCurrentAuthenticationDetails(httpServletRequest);
 
-        if (currentAuthenticationDetails != null) {
-            var currentUsername = currentAuthenticationDetails.subject;
-            var cart = cartService.getCartByUserName(currentUsername);
+        var currentUsername = currentAuthenticationDetails.subject;
+        var cart = cartService.getCartByUserName(currentUsername);
 
-            if (cart != null) {
-                var cartWithDeletedFood = cartService.getCartWithDeletedFood(cart, foodName);
+        if (cart != null) {
+            var cartWithDeletedFood = cartService.getCartWithDeletedFood(cart, foodName);
 
-                if (cartWithDeletedFood != null) {
-                    cartRepository.save(cartWithDeletedFood);
+            if (cartWithDeletedFood != null) {
+                cartRepository.save(cartWithDeletedFood);
 
-                    logger.info("Successfully deleted food " + foodName + " from cart");
+                logger.info("Successfully deleted food " + foodName + " from cart");
 
-                    return new ResponseEntity(HttpStatus.OK);
-                } else {
-                    var errorMessage = "Could not delete food " + foodName + " from cart";
-                    logger.info(errorMessage);
-
-                    var errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage, dateUtils.getCurrentDate());
-
-                    return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
-                }
+                return new ResponseEntity(HttpStatus.OK);
             } else {
-                var errorMessage = "Could not find the cart of the current user";
+                var errorMessage = "Could not delete food " + foodName + " from cart";
                 logger.info(errorMessage);
 
-                var errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorMessage, dateUtils.getCurrentDate());
+                var errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage, dateUtils.getCurrentDate());
 
-                return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
+                return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
             }
         } else {
-            var errorMessage = "User is not logged in, cannot remove food from cart";
+            var errorMessage = "Could not find the cart of the current user";
             logger.info(errorMessage);
 
-            var errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), errorMessage, dateUtils.getCurrentDate());
+            var errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorMessage, dateUtils.getCurrentDate());
 
-            return new ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping
     public ResponseEntity deleteFoodListFromCart(HttpServletRequest httpServletRequest) {
-        var authenticationDetails = authorizationService.getCurrentAuthenticationDetails(httpServletRequest);
+        cartService.deleteFoodListFromCart(httpServletRequest);
 
-        if (authenticationDetails != null) {
-            logger.info("Successfully retrieved authentication details");
-
-            var currentUsername = authenticationDetails.subject;
-            var cart = cartService.getCartByUserName(currentUsername);
-
-            if (cart != null) {
-                logger.info("Successfully retrieved the cart of the current user");
-
-                if (!cart.foodList.isEmpty()) {
-                    logger.info("Successfully found the cart foodlist");
-                    cart.foodList = null;
-                    cartRepository.save(cart);
-                    logger.info("Successfully deleted the foodlist from cart");
-
-                    return new ResponseEntity(HttpStatus.OK);
-                } else {
-                    var errorMessage = "Could not find the cart foodlist";
-                    logger.info(errorMessage);
-
-                    var errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorMessage, dateUtils.getCurrentDate());
-
-                    return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
-                }
-
-            } else {
-                var errorMessage = "Could not retrieve the cart of the current user";
-                logger.info(errorMessage);
-
-                var errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorMessage, dateUtils.getCurrentDate());
-
-                return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
-            }
-        } else {
-            var errorMessage = "Could not retrieve authentication details";
-            logger.info(errorMessage);
-
-            var errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), errorMessage, dateUtils.getCurrentDate());
-
-            return new ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED);
-        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

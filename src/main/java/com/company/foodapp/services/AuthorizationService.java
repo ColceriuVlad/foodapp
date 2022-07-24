@@ -1,9 +1,11 @@
 package com.company.foodapp.services;
 
+import com.company.foodapp.exceptions.NotAuthorizedException;
 import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
 import com.company.foodapp.models.AuthenticationDetails;
 import com.company.foodapp.utils.CookieUtils;
 import com.company.foodapp.utils.JwtUtils;
+import org.aspectj.weaver.ast.Not;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,12 +52,10 @@ public class AuthorizationService {
                 var authenticationDetails = claimsToAuthenticationDetailsMapper.map(authenticationTokenClaims);
                 return authenticationDetails;
             } else {
-                logger.info("Could not extract the claims from the authentication token");
-                return null;
+                throw new NotAuthorizedException("Could not extract the claims from the authentication token");
             }
         } else {
-            logger.info("Could not retrieve authentication token");
-            return null;
+            throw new NotAuthorizedException("Could not retrieve authentication token");
         }
     }
 }

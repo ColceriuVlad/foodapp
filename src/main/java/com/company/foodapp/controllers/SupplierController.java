@@ -65,18 +65,14 @@ public class SupplierController {
     @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
     @PostMapping
     public ResponseEntity<String> insertSupplier(@RequestBody Supplier supplier) {
-        ResponseEntity response = null;
-
         if (supplier.discountRate != null && supplier.transportationCost != null && supplier.transportationCurrency != null) {
             supplierRepository.save(supplier);
 
             logger.info("Supplier was saved");
-            response = new ResponseEntity("Supplier was saved", HttpStatus.OK);
+            return new ResponseEntity("Supplier was saved", HttpStatus.OK);
         } else {
             logger.info("Supplier was not saved");
-            response = new ResponseEntity("Supplier was not saved", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity("Supplier was not saved", HttpStatus.NOT_ACCEPTABLE);
         }
-
-        return response;
     }
 }
