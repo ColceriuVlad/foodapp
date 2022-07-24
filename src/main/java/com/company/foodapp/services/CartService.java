@@ -50,12 +50,9 @@ public class CartService {
                     return cart;
                 }
             }
-
-            logger.info("Could not retrieve the cart of user " + username);
-            return null;
+            throw new NullPointerException("Could not retrieve the cart of user " + username);
         } else {
-            logger.info("Could not retrieve any carts from the application");
-            return null;
+            throw new NullPointerException("Could not retrieve any carts from the application");
         }
     }
 
@@ -87,22 +84,15 @@ public class CartService {
         var currentUsername = authenticationDetails.subject;
         var cart = this.getCartByUserName(currentUsername);
 
-        if (cart != null) {
-            logger.info("Successfully retrieved the cart of the current user");
+        if (!cart.foodList.isEmpty()) {
+            logger.info("Successfully found the cart foodlist");
+            cart.foodList = null;
+            cartRepository.save(cart);
+            logger.info("Successfully deleted the foodlist from cart");
 
-            if (!cart.foodList.isEmpty()) {
-                logger.info("Successfully found the cart foodlist");
-                cart.foodList = null;
-                cartRepository.save(cart);
-                logger.info("Successfully deleted the foodlist from cart");
-
-                return true;
-            } else {
-                throw new NullPointerException("Could not find the cart foodlist");
-            }
-
+            return true;
         } else {
-            throw new NullPointerException("Could not retrieve the cart of the current user");
+            throw new NullPointerException("Could not find the cart foodlist");
         }
     }
 }
