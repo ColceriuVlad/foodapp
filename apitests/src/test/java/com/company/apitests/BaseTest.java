@@ -1,5 +1,6 @@
 package com.company.apitests;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -19,6 +20,7 @@ public class BaseTest {
         build.setContentType(ContentType.JSON);
         build.addFilter(new RequestLoggingFilter());
         build.addFilter(new ResponseLoggingFilter());
+        build.addFilter(new AllureRestAssured());
 
         requestSpecification = build.build();
         return requestSpecification;
