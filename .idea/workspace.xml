@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0b8ef421-4e7f-4818-b4b3-79fa4ace60f2" name="Changes" comment="Update dependencies">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apitests/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/apitests/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apitests/src/test/java/com/company/apitests/BaseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/apitests/src/test/java/com/company/apitests/BaseTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apitests/src/test/java/com/company/apitests/controllers/UserControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/apitests/src/test/java/com/company/apitests/controllers/UserControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apitests/src/test/java/com/company/apitests/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/apitests/src/test/java/com/company/apitests/models/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apitests/src/test/resources/allure.properties" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/apitests/src/test/resources/allure.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/gradlew" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/gradlew.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/FoodAppApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/FoodAppApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/configuration/DependenciesConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/configuration/DependenciesConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/controllers/AuthorizationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/controllers/AuthorizationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/controllers/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/controllers/CartController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/controllers/EmailController.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/controllers/EmailController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/controllers/FoodController.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/controllers/FoodController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/controllers/MessageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/controllers/MessageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/controllers/SupplierController.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/controllers/SupplierController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/controllers/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/dto/MessageDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/dto/MessageDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/exceptions/NotAuthorizedException.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/exceptions/NotAuthorizedException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/handlers/AuthHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/handlers/AuthHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/handlers/GenericExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/handlers/GenericExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/mappers/ClaimsToAuthenticationDetailsMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/mappers/ClaimsToAuthenticationDetailsMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/mappers/MessageMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/mappers/MessageMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/AuthenticationDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/AuthenticationDetails.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/Cart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/Email.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/Email.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/ErrorResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/ErrorResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/Food.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/Food.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/ForgotPasswordDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/ForgotPasswordDetails.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/Header.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/Header.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/Ordering.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/Ordering.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/Supplier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/UserPasswordHolder.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/UserPasswordHolder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/repositories/CartRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/repositories/CartRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/repositories/FoodRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/repositories/FoodRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/repositories/MessageRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/repositories/MessageRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/repositories/SupplierRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/repositories/SupplierRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/repositories/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/services/AuthorizationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/services/AuthorizationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/services/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/services/CartService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/services/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/services/EmailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/services/FoodService.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/services/FoodService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/utils/CookieUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/utils/CookieUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/utils/DateUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/utils/DateUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/utils/HttpServletResponseUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/utils/HttpServletResponseUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/utils/JacksonUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/utils/JacksonUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/utils/JwtUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/utils/JwtUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/utils/StringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/utils/StringUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/validators/MessageDetailsValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/validators/MessageDetailsValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/validators/OrderingValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/validators/OrderingValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/validators/UserValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/validators/UserValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/company/foodapp/controllers/AuthorizationControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/test/java/com/company/foodapp/controllers/AuthorizationControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/company/foodapp/controllers/FoodControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/test/java/com/company/foodapp/controllers/FoodControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/company/foodapp/controllers/SupplierControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/test/java/com/company/foodapp/controllers/SupplierControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/company/foodapp/controllers/UserControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/test/java/com/company/foodapp/controllers/UserControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/company/foodapp/services/FoodServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/test/java/com/company/foodapp/services/FoodServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/company/foodapp/utils/CookieUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/test/java/com/company/foodapp/utils/CookieUtilsTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/company/foodapp/utils/JwtUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/test/java/com/company/foodapp/utils/JwtUtilsTest.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="food-app" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="food-app" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="food-app" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="myId2FirstActivated">
+      <map>
+        <entry key="com.haulmont.jpb.jpaInspector" value="true" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="true" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+      </map>
+    </option>
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.haulmont.jpb.jpaInspector" value="false" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="false" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="false" />
+      </map>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2CDp1DwDwhr4JGtBkuBzg8J7o4u" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "jdk.selected.JAVA_MODULE": "11",
+    "last_opened_file_path": "C:/Users/vladc/projects/foodapp/foodapp-backend",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.75258917",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\vladc\projects\foodapp\apitests\target\allure-results" />
+      <recent name="C:\Users\vladc\projects\foodapp\apitests\src\test\java" />
+      <recent name="C:\Users\vladc\projects\foodapp\apitests\src" />
+      <recent name="C:\Users\vladc\projects\foodapp\apitests\src\test" />
+      <recent name="C:\Users\vladc\projects\foodapp\apitests" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="gradle apitests:test" />
+      <command value="mvn test" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.FoodAppApplication">
+    <configuration name="FoodAppApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.company.foodapp.FoodAppApplication" />
+      <module name="food-app.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.company.foodapp.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserControllerTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":apitests:test" />
+            <option value="--tests" />
+            <option value="&quot;com.company.apitests.controllers.UserControllerTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="UserControllerTest.testInsertUser" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":apitests:test" />
+            <option value="--tests" />
+            <option value="&quot;com.company.apitests.controllers.UserControllerTest.testInsertUser&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="UserControllerTest.testInsertUser (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="apitests" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.company.apitests.controllers.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.company.apitests.controllers" />
+      <option name="MAIN_CLASS_NAME" value="com.company.apitests.controllers.UserControllerTest" />
+      <option name="METHOD_NAME" value="testInsertUser" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserControllerTest.testInsertUser" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="food-app.apitests" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.company.apitests.controllers.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.company.apitests.controllers" />
+      <option name="MAIN_CLASS_NAME" value="com.company.apitests.controllers.UserControllerTest" />
+      <option name="METHOD_NAME" value="testInsertUser" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.UserControllerTest.testInsertUser (1)" />
+        <item itemvalue="JUnit.UserControllerTest.testInsertUser" />
+        <item itemvalue="Gradle.UserControllerTest" />
+        <item itemvalue="Gradle.UserControllerTest.testInsertUser" />
+        <item itemvalue="Application.FoodAppApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0b8ef421-4e7f-4818-b4b3-79fa4ace60f2" name="Changes" comment="" />
+      <created>1658346795430</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1658346795430</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Add integration testing repository">
+      <created>1658356301808</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1658356301808</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Remove karate, add RestAssured">
+      <created>1658433075271</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1658433075272</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Add allure">
+      <created>1658509706078</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1658509706078</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Fix allure plugin">
+      <created>1658514914729</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1658514914729</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Add controller advice, update cart">
+      <created>1658662259810</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1658662259810</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Add ordering functionality">
+      <created>1658665443769</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1658665443769</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Update dependencies, update basetest">
+      <created>1659894662704</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1659894662704</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Update dependencies">
+      <created>1659894741227</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1659894741227</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Add integration testing repository" />
+    <MESSAGE value="Remove karate, add RestAssured" />
+    <MESSAGE value="Add allure" />
+    <MESSAGE value="Fix allure plugin" />
+    <MESSAGE value="Add controller advice, update cart" />
+    <MESSAGE value="Add ordering functionality" />
+    <MESSAGE value="Update dependencies, update basetest" />
+    <MESSAGE value="Update dependencies" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update dependencies" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/company/foodapp/controllers/CartController.java</url>
+          <line>122</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="io.restassured.internal.RestAssuredResponseImpl" memberName="logRepository" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
