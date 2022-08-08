@@ -9,6 +9,7 @@ import com.company.foodapp.repositories.UserRepository;
 import com.company.foodapp.services.AuthorizationService;
 import com.company.foodapp.services.CartService;
 import com.company.foodapp.services.EmailService;
+import com.company.foodapp.services.UserService;
 import com.company.foodapp.utils.CookieUtils;
 import com.company.foodapp.utils.DateUtils;
 import com.company.foodapp.utils.JwtUtils;
@@ -30,6 +31,7 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+    private UserService userService;
     private UserRepository userRepository;
     private Logger logger;
     private UserValidator userValidator;
@@ -42,7 +44,8 @@ public class UserController {
     private DateUtils dateUtils;
 
     @Autowired
-    public UserController(UserRepository userRepository, Logger logger, UserValidator userValidator, StringUtils stringUtils, EmailService emailService, CookieUtils cookieUtils, JwtUtils jwtUtils, AuthorizationService authorizationService, CartService cartService, DateUtils dateUtils) {
+    public UserController(UserService userService, UserRepository userRepository, Logger logger, UserValidator userValidator, StringUtils stringUtils, EmailService emailService, CookieUtils cookieUtils, JwtUtils jwtUtils, AuthorizationService authorizationService, CartService cartService, DateUtils dateUtils) {
+        this.userService = userService;
         this.userRepository = userRepository;
         this.logger = logger;
         this.userValidator = userValidator;
@@ -58,15 +61,8 @@ public class UserController {
     @GetMapping
     @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
     public ResponseEntity<List<User>> getAllUsers() {
-        var users = userRepository.findAll();
-
-        if (!users.isEmpty()) {
-            logger.info("Successfully retrieved users");
-            return new ResponseEntity<>(users, HttpStatus.OK);
-        } else {
-            logger.info("Could not retrieve users");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        var users = userService.getAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
