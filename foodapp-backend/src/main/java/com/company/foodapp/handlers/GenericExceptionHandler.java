@@ -2,6 +2,7 @@ package com.company.foodapp.handlers;
 
 import com.company.foodapp.exceptions.EntityNotFoundException;
 import com.company.foodapp.exceptions.NotAuthorizedException;
+import com.company.foodapp.exceptions.NotValidatedException;
 import com.company.foodapp.models.ErrorResponse;
 import com.company.foodapp.utils.DateUtils;
 import org.slf4j.Logger;
@@ -51,14 +52,15 @@ public class GenericExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorResponse> handleConstraintValidationException(ConstraintViolationException constraintViolationException) {
-        var errorMessage = constraintViolationException.getMessage();
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleNotValidatedException(NotValidatedException notValidatedException) {
+        var errorMessage = notValidatedException.getMessage();
         logger.info(errorMessage);
 
         var errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage, dateUtils.getCurrentDate());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception exception) {
