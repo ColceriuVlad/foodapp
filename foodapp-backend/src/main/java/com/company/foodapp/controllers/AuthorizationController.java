@@ -1,5 +1,6 @@
 package com.company.foodapp.controllers;
 
+import com.company.foodapp.dto.UserLoginDto;
 import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
 import com.company.foodapp.models.*;
 import com.company.foodapp.repositories.UserRepository;
@@ -48,7 +49,7 @@ public class AuthorizationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody User user, HttpServletResponse httpServletResponse) {
+    public ResponseEntity login(@RequestBody UserLoginDto user, HttpServletResponse httpServletResponse) {
         var usersFromDb = userRepository.findAll();
 
         for (var userFromDb : usersFromDb) {
@@ -67,7 +68,7 @@ public class AuthorizationController {
                 var jwtToken = jwtUtils.createJWT(authenticationDetails);
                 logger.info("User has logged in successfully");
                 cookieUtils.createCookie("token", jwtToken, httpServletResponse);
-                return new ResponseEntity(HttpStatus.OK);
+                return new ResponseEntity(jwtToken, HttpStatus.OK);
             }
         }
 
