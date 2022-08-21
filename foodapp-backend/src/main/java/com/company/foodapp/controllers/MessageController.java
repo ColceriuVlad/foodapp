@@ -2,16 +2,10 @@ package com.company.foodapp.controllers;
 
 import com.company.foodapp.dto.MessageDto;
 import com.company.foodapp.handlers.AuthHandler;
-import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
-import com.company.foodapp.mappers.MessageMapper;
 import com.company.foodapp.models.Message;
-import com.company.foodapp.repositories.MessageRepository;
-import com.company.foodapp.utils.CookieUtils;
-import com.company.foodapp.utils.JwtUtils;
-import com.company.foodapp.validators.MessageDetailsValidator;
+import com.company.foodapp.services.MessageService;
 import com.kastkode.springsandwich.filter.annotation.Before;
 import com.kastkode.springsandwich.filter.annotation.BeforeElement;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,91 +17,23 @@ import java.util.List;
 @RequestMapping("/messages")
 @RestController
 public class MessageController {
-    private MessageRepository messageRepository;
-    private MessageMapper messageMapper;
-    private MessageDetailsValidator messageDtoValidator;
-    private Logger logger;
-    private CookieUtils cookieUtils;
-    private JwtUtils jwtUtils;
-    private ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper;
+    private MessageService messageService;
 
     @Autowired
-    public MessageController(MessageRepository messageRepository, MessageMapper messageMapper, MessageDetailsValidator messageDetailsValidator, Logger logger, CookieUtils cookieUtils, JwtUtils jwtUtils, ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper) {
-        this.messageRepository = messageRepository;
-        this.messageMapper = messageMapper;
-        this.messageDtoValidator = messageDetailsValidator;
-        this.logger = logger;
-        this.cookieUtils = cookieUtils;
-        this.jwtUtils = jwtUtils;
-        this.claimsToAuthenticationDetailsMapper = claimsToAuthenticationDetailsMapper;
+    public MessageController(MessageService messageService) {
+        this.messageService = messageService;
     }
 
     @GetMapping
     @Before(@BeforeElement(value = AuthHandler.class, flags = {"admin"}))
     public ResponseEntity<List<Message>> getAllMessages() {
-        var messageList = messageRepository.findAll();
-        ResponseEntity response;
-
-        if (!messageList.isEmpty()) {
-            logger.info("Successfully retrieved all the messages from the application");
-
-            response = new ResponseEntity(messageList, HttpStatus.OK);
-        } else {
-            logger.info("Could not retrieve the messages from the application");
-
-            response = new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-
-        return response;
+        var messageList = messageService.getAllMessages();
+        return new ResponseEntity(messageList, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity insertMessage(@RequestBody MessageDto messageDto, HttpServletRequest httpServletRequest) {
-        var authenticationToken = cookieUtils.getCookieValue("token", httpServletRequest);
-
-        if (authenticationToken == null) {
-            logger.info("Could not retrieve authentication token");
-        } else {
-            logger.info("Authentication token was retrieved");
-        }
-
-        var authenticationDetailsClaims = jwtUtils.decodeJWT(authenticationToken);
-
-        if (authenticationDetailsClaims == null) {
-            logger.info("Could not decode authentication token");
-        } else {
-            logger.info("Authentication token was decoded");
-        }
-
-        var authenticationDetails = claimsToAuthenticationDetailsMapper.map(authenticationDetailsClaims);
-
-        // If user is authenticated, include username and role in the message, otherwise send a message with just messageDetails
-        if (authenticationDetails != null) {
-            var validatedMessageDto = messageDtoValidator.getValidatedMessageDto(messageDto);
-
-            if (validatedMessageDto != null) {
-                var message = messageMapper.map(messageDto, authenticationDetails);
-                messageRepository.save(message);
-
-                logger.info("Message was sent to the database by authenticated user " + authenticationDetails.subject);
-                return new ResponseEntity(HttpStatus.OK);
-            } else {
-                logger.info("Could not validate the message details, incorrect request by user " + authenticationDetails.subject);
-                return new ResponseEntity(HttpStatus.BAD_REQUEST);
-            }
-        } else {
-            var validatedMessageDto = messageDtoValidator.getValidatedMessageDtoWithEmail(messageDto);
-
-            if (validatedMessageDto != null) {
-                var message = messageMapper.map(messageDto);
-                messageRepository.save(message);
-
-                logger.info("Message was sent to the database");
-                return new ResponseEntity(HttpStatus.OK);
-            } else {
-                logger.info("Could not validate the message details");
-                return new ResponseEntity(HttpStatus.BAD_REQUEST);
-            }
-        }
+        messageService.insertMessage(messageDto, httpServletRequest);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
