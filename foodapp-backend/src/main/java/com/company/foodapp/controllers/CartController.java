@@ -1,8 +1,8 @@
 package com.company.foodapp.controllers;
 
+import com.company.foodapp.exceptions.InvalidOperationException;
 import com.company.foodapp.handlers.AuthHandler;
 import com.company.foodapp.models.Cart;
-import com.company.foodapp.models.ErrorResponse;
 import com.company.foodapp.models.Ordering;
 import com.company.foodapp.repositories.CartRepository;
 import com.company.foodapp.services.AuthorizationService;
@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -95,11 +96,7 @@ public class CartController {
 
                     return new ResponseEntity(HttpStatus.OK);
                 } else {
-                    var errorMessage = "Cannot add food to cart from a different supplier";
-                    logger.info(errorMessage);
-
-                    var errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), errorMessage, dateUtils.getCurrentDate());
-                    return new ResponseEntity(errorResponse, HttpStatus.UNAUTHORIZED);
+                    throw new InvalidOperationException("You can only add food to cart from the same supplier");
                 }
             } else {
                 cart.foodList.add(food);
@@ -109,12 +106,7 @@ public class CartController {
             }
         } else {
             var errorMessage = String.format("Could not find food %s from supplier %s", foodName, supplierName);
-            var errorResponse = new ErrorResponse(
-                    HttpStatus.NOT_FOUND.value(),
-                    errorMessage,
-                    dateUtils.getCurrentDate());
-
-            return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
+            throw new EntityNotFoundException(errorMessage);
         }
     }
 
@@ -134,12 +126,7 @@ public class CartController {
 
             return new ResponseEntity(HttpStatus.OK);
         } else {
-            var errorMessage = "Could not delete food " + foodName + " from cart";
-            logger.info(errorMessage);
-
-            var errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage, dateUtils.getCurrentDate());
-
-            return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
+            throw new InvalidOperationException("Could not delete food " + foodName + " from cart");
         }
     }
 
@@ -179,11 +166,7 @@ public class CartController {
 
             return new ResponseEntity(HttpStatus.OK);
         } else {
-            var errorMessage = "Cart food list is empty, could not place order";
-            logger.info(errorMessage);
-
-            var errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorMessage, dateUtils.getCurrentDate());
-            return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
+            throw new InvalidOperationException("Cart food list is empty, could not place order");
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.company.foodapp.controllers;
 
+import com.company.foodapp.dto.UserLoginDto;
 import com.company.foodapp.exceptions.NotAuthorizedException;
 import com.company.foodapp.models.AuthenticationDetails;
 import com.company.foodapp.models.Email;
@@ -49,29 +50,33 @@ public class AuthorizationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody User user, HttpServletResponse httpServletResponse) {
+    public ResponseEntity login(@RequestBody UserLoginDto userLoginDto, HttpServletResponse httpServletResponse) {
+        var currentDay = environment.getProperty("CURRENT_DAY");
+        logger.info(currentDay);
+
         var usersFromDb = userRepository.findAll();
 
         for (var userFromDb : usersFromDb) {
-            if (user.username.equals(userFromDb.username) && user.password.equals(userFromDb.password)) {
+            if (userLoginDto.username.equals(userFromDb.username) && userLoginDto.password.equals(userFromDb.password)) {
                 if (userFromDb.activated == false) {
                     throw new NotAuthorizedException("User is not validated, please perform the email validation");
                 }
+
+                var jwtTokenDuration = environment.getProperty("JWT_AUTHENTICATION_TOKEN_DURATION");
                 var authenticationDetails = new AuthenticationDetails(
                         userFromDb.username,
                         userFromDb.role,
                         userFromDb.email,
-                        Long.parseLong(environment.getProperty("JWT_AUTHENTICATION_TOKEN_DURATION")));
+                        Long.parseLong(jwtTokenDuration));
 
                 var jwtToken = jwtUtils.createJWT(authenticationDetails);
                 logger.info("User has logged in successfully");
                 cookieUtils.createCookie("token", jwtToken, httpServletResponse);
-                return new ResponseEntity("User has logged in", HttpStatus.OK);
+                return new ResponseEntity(jwtToken, HttpStatus.OK);
             }
         }
 
-        logger.info("User was not authenticated");
-        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        throw new NotAuthorizedException("Incorrect username or password, please try again");
     }
 
     @GetMapping("/getCurrentAuthenticationDetails")

@@ -1,16 +1,13 @@
 package com.company.foodapp.handlers;
 
-import com.company.foodapp.models.ErrorResponse;
-import com.company.foodapp.repositories.UserRepository;
+import com.company.foodapp.exceptions.NotAuthenticatedException;
+import com.company.foodapp.exceptions.NotAuthorizedException;
 import com.company.foodapp.utils.CookieUtils;
-import com.company.foodapp.utils.DateUtils;
 import com.company.foodapp.utils.JwtUtils;
-import com.company.foodapp.utils.ResponseUtils;
 import com.kastkode.springsandwich.filter.api.BeforeHandler;
 import com.kastkode.springsandwich.filter.api.Flow;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 
@@ -21,19 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthHandler implements BeforeHandler {
     private JwtUtils jwtUtils;
     private CookieUtils cookieUtils;
-    private UserRepository userRepository;
     private Logger logger;
-    private DateUtils dateUtils;
-    private ResponseUtils responseUtils;
 
     @Autowired
-    public AuthHandler(JwtUtils jwtUtils, CookieUtils cookieUtils, UserRepository userRepository, Logger logger, DateUtils dateUtils, ResponseUtils responseUtils) {
+    public AuthHandler(JwtUtils jwtUtils, CookieUtils cookieUtils, Logger logger) {
         this.jwtUtils = jwtUtils;
         this.cookieUtils = cookieUtils;
-        this.userRepository = userRepository;
         this.logger = logger;
-        this.dateUtils = dateUtils;
-        this.responseUtils = responseUtils;
     }
 
     @Override
@@ -43,27 +34,13 @@ public class AuthHandler implements BeforeHandler {
         response.setStatus(HttpServletResponse.SC_ACCEPTED);
 
         if (token == null) {
-            var errorMessage = "Request token is null";
-            logger.info(errorMessage);
-
-            var errorResponse = new ErrorResponse(HttpStatus.FORBIDDEN.value(), errorMessage, dateUtils.getCurrentDate());
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-            responseUtils.sendJsonResponse(errorResponse, response);
-
-            return Flow.HALT;
+            throw new NotAuthenticatedException("User needs to be logged in to perform this operation");
         }
 
         var claims = jwtUtils.decodeJWT(token);
 
         if (claims == null) {
-            var errorMessage = "Could not decode authentication token";
-            logger.info(errorMessage);
-
-            var errorResponse = new ErrorResponse(HttpStatus.FORBIDDEN.value(), errorMessage, dateUtils.getCurrentDate());
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-            responseUtils.sendJsonResponse(errorResponse, response);
-
-            return Flow.HALT;
+            throw new NotAuthenticatedException("Authentication token has expired or is incorrect");
         }
 
         var role = claims.get("role", String.class);
@@ -72,21 +49,13 @@ public class AuthHandler implements BeforeHandler {
         if (flags.length != 0) {
             for (var flag : flags) {
                 if (flag.equals(role)) {
-                    logger.info("Allowing user with role " + role + " to call the application endpoint");
+                    logger.info("Allowing user with the corresponding role to perform the operation");
                     return Flow.CONTINUE;
                 }
             }
-            var errorMessage = "User does not have the corresponding role to call this application endpoint";
-            logger.info(errorMessage);
-
-            var errorResponse = new ErrorResponse(HttpStatus.FORBIDDEN.value(), errorMessage, dateUtils.getCurrentDate());
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-
-            responseUtils.sendJsonResponse(errorResponse, response);
-
-            return Flow.HALT;
+            throw new NotAuthorizedException("User is not authorized to perform this operation");
         } else {
-            logger.info("Allowing the user to call the application endpoint");
+            logger.info("Allowing the user to perform the operation");
 
             return Flow.CONTINUE;
         }

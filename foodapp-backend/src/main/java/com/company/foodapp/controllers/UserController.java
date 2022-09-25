@@ -1,8 +1,9 @@
 package com.company.foodapp.controllers;
 
+import com.company.foodapp.exceptions.InvalidOperationException;
+import com.company.foodapp.exceptions.NotValidatedException;
 import com.company.foodapp.handlers.AuthHandler;
 import com.company.foodapp.models.Email;
-import com.company.foodapp.models.ErrorResponse;
 import com.company.foodapp.models.User;
 import com.company.foodapp.models.UserPasswordHolder;
 import com.company.foodapp.repositories.UserRepository;
@@ -11,7 +12,6 @@ import com.company.foodapp.services.CartService;
 import com.company.foodapp.services.EmailService;
 import com.company.foodapp.services.UserService;
 import com.company.foodapp.utils.CookieUtils;
-import com.company.foodapp.utils.DateUtils;
 import com.company.foodapp.utils.JwtUtils;
 import com.company.foodapp.utils.StringUtils;
 import com.company.foodapp.validators.UserValidator;
@@ -23,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -41,10 +42,9 @@ public class UserController {
     private JwtUtils jwtUtils;
     private AuthorizationService authorizationService;
     private CartService cartService;
-    private DateUtils dateUtils;
 
     @Autowired
-    public UserController(UserService userService, UserRepository userRepository, Logger logger, UserValidator userValidator, StringUtils stringUtils, EmailService emailService, CookieUtils cookieUtils, JwtUtils jwtUtils, AuthorizationService authorizationService, CartService cartService, DateUtils dateUtils) {
+    public UserController(UserService userService, UserRepository userRepository, Logger logger, UserValidator userValidator, StringUtils stringUtils, EmailService emailService, CookieUtils cookieUtils, JwtUtils jwtUtils, AuthorizationService authorizationService, CartService cartService) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.logger = logger;
@@ -55,7 +55,6 @@ public class UserController {
         this.jwtUtils = jwtUtils;
         this.authorizationService = authorizationService;
         this.cartService = cartService;
-        this.dateUtils = dateUtils;
     }
 
     @GetMapping
@@ -103,23 +102,10 @@ public class UserController {
                 return new ResponseEntity(HttpStatus.OK);
             } else {
                 var errorMessage = "Could not send validation email to user " + email.to;
-                logger.info(errorMessage);
-
-                var errorResponse = new ErrorResponse(
-                        HttpStatus.BAD_REQUEST.value(),
-                        errorMessage,
-                        dateUtils.getCurrentDate());
-                return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
+                throw new InvalidOperationException(errorMessage);
             }
         } else {
-            var errorMessage = "User was not validated";
-            logger.info(errorMessage);
-
-            var errorResponse = new ErrorResponse(
-                    HttpStatus.BAD_REQUEST.value(),
-                    errorMessage, dateUtils.
-                    getCurrentDate());
-            return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
+            throw new NotValidatedException("User validations have failed, please respect the corresponding user format");
         }
     }
 
@@ -143,13 +129,7 @@ public class UserController {
             }
         } catch (Exception exception) {
             var errorMessage = "Could not find user with validation code " + validationCode;
-            logger.info(errorMessage);
-
-            var errorResponse = new ErrorResponse(
-                    HttpStatus.NOT_FOUND.value(),
-                    errorMessage,
-                    dateUtils.getCurrentDate());
-            return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
+            throw new EntityNotFoundException(errorMessage);
         }
     }
 

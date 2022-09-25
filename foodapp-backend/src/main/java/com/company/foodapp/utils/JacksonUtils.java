@@ -28,4 +28,8 @@ public class JacksonUtils {
             return null;
         }
     }
+
+    public <T> T parseJsonToObject(String json, Class<T> typeOfObject) throws JsonProcessingException {
+        return objectMapper.readValue(json, typeOfObject);
+    }
 }
