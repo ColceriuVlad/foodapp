@@ -4,8 +4,8 @@ import com.company.foodapp.models.ErrorResponse;
 import com.company.foodapp.repositories.UserRepository;
 import com.company.foodapp.utils.CookieUtils;
 import com.company.foodapp.utils.DateUtils;
-import com.company.foodapp.utils.HttpServletResponseUtils;
 import com.company.foodapp.utils.JwtUtils;
+import com.company.foodapp.utils.ResponseUtils;
 import com.kastkode.springsandwich.filter.api.BeforeHandler;
 import com.kastkode.springsandwich.filter.api.Flow;
 import org.slf4j.Logger;
@@ -24,16 +24,16 @@ public class AuthHandler implements BeforeHandler {
     private UserRepository userRepository;
     private Logger logger;
     private DateUtils dateUtils;
-    private HttpServletResponseUtils httpServletResponseUtils;
+    private ResponseUtils responseUtils;
 
     @Autowired
-    public AuthHandler(JwtUtils jwtUtils, CookieUtils cookieUtils, UserRepository userRepository, Logger logger, DateUtils dateUtils, HttpServletResponseUtils httpServletResponseUtils) {
+    public AuthHandler(JwtUtils jwtUtils, CookieUtils cookieUtils, UserRepository userRepository, Logger logger, DateUtils dateUtils, ResponseUtils responseUtils) {
         this.jwtUtils = jwtUtils;
         this.cookieUtils = cookieUtils;
         this.userRepository = userRepository;
         this.logger = logger;
         this.dateUtils = dateUtils;
-        this.httpServletResponseUtils = httpServletResponseUtils;
+        this.responseUtils = responseUtils;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class AuthHandler implements BeforeHandler {
 
             var errorResponse = new ErrorResponse(HttpStatus.FORBIDDEN.value(), errorMessage, dateUtils.getCurrentDate());
             response.setStatus(HttpStatus.FORBIDDEN.value());
-            httpServletResponseUtils.sendJsonResponse(errorResponse, response);
+            responseUtils.sendJsonResponse(errorResponse, response);
 
             return Flow.HALT;
         }
@@ -61,7 +61,7 @@ public class AuthHandler implements BeforeHandler {
 
             var errorResponse = new ErrorResponse(HttpStatus.FORBIDDEN.value(), errorMessage, dateUtils.getCurrentDate());
             response.setStatus(HttpStatus.FORBIDDEN.value());
-            httpServletResponseUtils.sendJsonResponse(errorResponse, response);
+            responseUtils.sendJsonResponse(errorResponse, response);
 
             return Flow.HALT;
         }
@@ -82,7 +82,7 @@ public class AuthHandler implements BeforeHandler {
             var errorResponse = new ErrorResponse(HttpStatus.FORBIDDEN.value(), errorMessage, dateUtils.getCurrentDate());
             response.setStatus(HttpStatus.FORBIDDEN.value());
 
-            httpServletResponseUtils.sendJsonResponse(errorResponse, response);
+            responseUtils.sendJsonResponse(errorResponse, response);
 
             return Flow.HALT;
         } else {

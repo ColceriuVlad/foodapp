@@ -5,7 +5,6 @@ import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
 import com.company.foodapp.models.AuthenticationDetails;
 import com.company.foodapp.utils.CookieUtils;
 import com.company.foodapp.utils.JwtUtils;
-import org.aspectj.weaver.ast.Not;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

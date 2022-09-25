@@ -1,7 +1,10 @@
 package com.company.foodapp.controllers;
 
-import com.company.foodapp.mappers.ClaimsToAuthenticationDetailsMapper;
-import com.company.foodapp.models.*;
+import com.company.foodapp.exceptions.NotAuthorizedException;
+import com.company.foodapp.models.AuthenticationDetails;
+import com.company.foodapp.models.Email;
+import com.company.foodapp.models.ForgotPasswordDetails;
+import com.company.foodapp.models.User;
 import com.company.foodapp.repositories.UserRepository;
 import com.company.foodapp.services.AuthorizationService;
 import com.company.foodapp.services.EmailService;
@@ -24,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthorizationController {
     private JwtUtils jwtUtils;
     private CookieUtils cookieUtils;
-    private ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper;
     private UserRepository userRepository;
     private Environment environment;
     private Logger logger;
@@ -34,10 +36,9 @@ public class AuthorizationController {
     private DateUtils dateUtils;
 
     @Autowired
-    public AuthorizationController(JwtUtils jwtUtils, CookieUtils cookieUtils, ClaimsToAuthenticationDetailsMapper claimsToAuthenticationDetailsMapper, UserRepository userRepository, Environment environment, Logger logger, EmailService emailService, StringUtils stringUtils, AuthorizationService authorizationService, DateUtils dateUtils) {
+    public AuthorizationController(JwtUtils jwtUtils, CookieUtils cookieUtils, UserRepository userRepository, Environment environment, Logger logger, EmailService emailService, StringUtils stringUtils, AuthorizationService authorizationService, DateUtils dateUtils) {
         this.jwtUtils = jwtUtils;
         this.cookieUtils = cookieUtils;
-        this.claimsToAuthenticationDetailsMapper = claimsToAuthenticationDetailsMapper;
         this.userRepository = userRepository;
         this.environment = environment;
         this.logger = logger;
@@ -54,9 +55,7 @@ public class AuthorizationController {
         for (var userFromDb : usersFromDb) {
             if (user.username.equals(userFromDb.username) && user.password.equals(userFromDb.password)) {
                 if (userFromDb.activated == false) {
-                    logger.info("User is not validated, please perform the email validation");
-
-                    return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+                    throw new NotAuthorizedException("User is not validated, please perform the email validation");
                 }
                 var authenticationDetails = new AuthenticationDetails(
                         userFromDb.username,
@@ -67,7 +66,7 @@ public class AuthorizationController {
                 var jwtToken = jwtUtils.createJWT(authenticationDetails);
                 logger.info("User has logged in successfully");
                 cookieUtils.createCookie("token", jwtToken, httpServletResponse);
-                return new ResponseEntity(HttpStatus.OK);
+                return new ResponseEntity("User has logged in", HttpStatus.OK);
             }
         }
 

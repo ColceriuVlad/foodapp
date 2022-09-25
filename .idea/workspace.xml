@@ -4,75 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b8ef421-4e7f-4818-b4b3-79fa4ace60f2" name="Changes" comment="Update dependencies">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apitests/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/apitests/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apitests/src/test/java/com/company/apitests/BaseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/apitests/src/test/java/com/company/apitests/BaseTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apitests/src/test/java/com/company/apitests/controllers/UserControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/apitests/src/test/java/com/company/apitests/controllers/UserControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apitests/src/test/java/com/company/apitests/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/apitests/src/test/java/com/company/apitests/models/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apitests/src/test/resources/allure.properties" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/apitests/src/test/resources/allure.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/gradlew" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/gradlew.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/settings.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/FoodAppApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/FoodAppApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/configuration/DependenciesConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/configuration/DependenciesConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/controllers/AuthorizationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/controllers/AuthorizationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/controllers/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/controllers/CartController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/controllers/EmailController.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/controllers/EmailController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/controllers/FoodController.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/controllers/FoodController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/controllers/MessageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/controllers/MessageController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/controllers/SupplierController.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/controllers/SupplierController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/controllers/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/dto/MessageDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/dto/MessageDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/exceptions/NotAuthorizedException.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/exceptions/NotAuthorizedException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/handlers/AuthHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/handlers/AuthHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/handlers/GenericExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/handlers/GenericExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/mappers/ClaimsToAuthenticationDetailsMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/mappers/ClaimsToAuthenticationDetailsMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/mappers/MessageMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/mappers/MessageMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/AuthenticationDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/AuthenticationDetails.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/Cart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/Email.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/Email.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/ErrorResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/ErrorResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/Food.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/Food.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/ForgotPasswordDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/ForgotPasswordDetails.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/Header.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/Header.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/Message.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/Ordering.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/Ordering.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/Supplier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/models/UserPasswordHolder.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/models/UserPasswordHolder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/repositories/CartRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/repositories/CartRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/repositories/FoodRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/repositories/FoodRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/repositories/MessageRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/repositories/MessageRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/repositories/SupplierRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/repositories/SupplierRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/repositories/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/services/AuthorizationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/services/AuthorizationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/services/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/services/CartService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/services/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/services/EmailService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/services/FoodService.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/services/FoodService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/utils/CookieUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/utils/CookieUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/utils/DateUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/utils/DateUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/utils/HttpServletResponseUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/utils/HttpServletResponseUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/utils/JacksonUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/utils/JacksonUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/utils/JwtUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/utils/JwtUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/utils/StringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/utils/StringUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/validators/MessageDetailsValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/validators/MessageDetailsValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/validators/OrderingValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/validators/OrderingValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/foodapp/validators/UserValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/java/com/company/foodapp/validators/UserValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/company/foodapp/controllers/AuthorizationControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/test/java/com/company/foodapp/controllers/AuthorizationControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/company/foodapp/controllers/FoodControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/test/java/com/company/foodapp/controllers/FoodControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/company/foodapp/controllers/SupplierControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/test/java/com/company/foodapp/controllers/SupplierControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/company/foodapp/controllers/UserControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/test/java/com/company/foodapp/controllers/UserControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/company/foodapp/services/FoodServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/test/java/com/company/foodapp/services/FoodServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/company/foodapp/utils/CookieUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/test/java/com/company/foodapp/utils/CookieUtilsTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/company/foodapp/utils/JwtUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/foodapp-backend/src/test/java/com/company/foodapp/utils/JwtUtilsTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="0b8ef421-4e7f-4818-b4b3-79fa4ace60f2" name="Changes" comment="Update dependencies" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -149,22 +81,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "jdk.selected.JAVA_MODULE": "11",
-    "last_opened_file_path": "C:/Users/vladc/projects/foodapp/foodapp-backend",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.75258917",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;11&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/vladc/projects/foodapp/foodapp-backend&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.75258917&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\vladc\projects\foodapp\apitests\target\allure-results" />
