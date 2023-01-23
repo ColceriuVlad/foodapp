@@ -24,11 +24,18 @@ public class RequestUtils {
         var requestURL = requestWrapper.getRequestURI();
         var requestMethodType = requestWrapper.getMethod();
         var requestBody = new String(requestWrapper.getContentAsByteArray(), requestWrapper.getCharacterEncoding());
-        var requestBodyMap = jacksonUtils.parseJsonToObject(requestBody, Map.class);
-        secretsValidator.validateMap(requestBodyMap);
-        var formattedRequestBody = jacksonUtils.parseObjectToJson(requestBodyMap);
-        var formattedRequest = new FormattedRequest(requestURL, requestMethodType, formattedRequestBody);
-        var formattedRequestAsString = jacksonUtils.parseObjectToJson(formattedRequest);
-        return formattedRequestAsString;
+
+        try {
+            var requestBodyMap = jacksonUtils.parseJsonToObject(requestBody, Map.class);
+            secretsValidator.validateMap(requestBodyMap);
+            var formattedRequestBody = jacksonUtils.parseObjectToJson(requestBodyMap);
+            var formattedRequest = new FormattedRequest(requestURL, requestMethodType, formattedRequestBody);
+            var formattedRequestAsString = jacksonUtils.parseObjectToJson(formattedRequest);
+            return formattedRequestAsString;
+        } catch (IOException ioException) {
+            var formattedRequest = new FormattedRequest(requestURL, requestMethodType, requestBody);
+            var formattedRequestAsString = jacksonUtils.parseObjectToJson(formattedRequest);
+            return formattedRequestAsString;
+        }
     }
 }
