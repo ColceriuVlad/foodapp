@@ -1,0 +1,4 @@
+FROM eclipse-temurin:11-jre-alpine
+COPY build/libs/food-app-*.jar /usr/local/food-app.jar
+EXPOSE 3000
+CMD java -jar /usr/local/food-app.jar --spring.profiles.active=${profile}
